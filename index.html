@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audiolibros CyberNeon Index</title>
+    <!-- Favicon para la pestaña del navegador -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%2307070a'/><path d='M256 96c-79.5 0-144 64.5-144 144v112c0 26.5 21.5 48 48 48h16c17.7 0 32-14.3 32-32V288c0-17.7-14.3-32-32-32h-32v-16c0-61.9 50.1-112 112-112s112 50.1 112 112v16h-32c-17.7 0-32 14.3-32 32v80c0 17.7 14.3 32 32 32h16c26.5 0 48-21.5 48-48V240c0-79.5-64.5-144-144-144z' fill='%23ff0055'/></svg>">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        neonRed: '#ff0055',
+                        neonRedGlow: 'rgba(255, 0, 85, 0.4)',
+                        darkBg: '#07070a',
+                        darkCard: '#0f0f15',
+                        darkGlass: 'rgba(15, 15, 23, 0.75)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CSS Custom styles & Neon Glow Helpers */
+        body {
+            background-color: #07070a;
+            color: #f1f5f9;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism iOS style */
+        .ios-glass {
+            background: rgba(18, 18, 28, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .ios-glass-card {
+            background: rgba(22, 22, 35, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ios-glass-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            border-color: var(--genre-neon);
+            box-shadow: 0 10px 30px -10px var(--genre-glow);
+        }
+
+        /* iOS Spring Animations & Dynamic Active Scale */
+        .ios-btn {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, opacity 0.2s ease;
+        }
+        .ios-btn:active {
+            transform: scale(0.93) !important;
+        }
+
+        /* Neon Border Dynamic class support */
+        .neon-border-box {
+            border: 1px solid var(--genre-neon);
+            box-shadow: 0 0 15px var(--genre-glow);
+        }
+        
+        .neon-text-glow {
+            text-shadow: 0 0 12px var(--genre-neon);
+        }
+
+        .neon-badge {
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--genre-neon);
+            color: var(--genre-neon);
+            box-shadow: inset 0 0 8px var(--genre-glow), 0 0 8px var(--genre-glow);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07070a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 0, 85, 0.3);
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff0055;
+            box-shadow: 0 0 10px #ff0055;
+        }
+
+        /* Red Neon Pulsing Header Icon */
+        .glow-pulse-red {
+            animation: redPulse 2.5s infinite alternate ease-in-out;
+        }
+        @keyframes redPulse {
+            0% {
+                filter: drop-shadow(0 0 4px rgba(255, 0, 85, 0.5));
+            }
+            100% {
+                filter: drop-shadow(0 0 18px rgba(255, 0, 85, 0.95));
+            }
+        }
+
+        /* Canvas Background */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Modal Slide iOS animation */
+        .modal-enter {
+            animation: modalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* View Transition Animation */
+        .view-transition {
+            animation: viewIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes viewIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Drag & Drop Styles for iOS reordering */
+        .dragging {
+            opacity: 0.4 !important;
+            transform: scale(0.98);
+            border: 2px dashed var(--genre-neon, #ff0055) !important;
+        }
+        .drag-over {
+            border-top: 3px solid var(--genre-neon, #ff0055) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col relative pb-20 selection:bg-neonRed selection:text-white">
+
+    <!-- Canvas para Partículas Neón Interactivas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Top Navigation Header Sticky iOS Glass -->
+    <header class="sticky top-0 z-40 ios-glass border-b border-slate-800/80 px-4 lg:px-8 py-3 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <!-- Logo Brand -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('genres')">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-900 to-neonRed flex items-center justify-center text-white shadow-[0_0_20px_rgba(255,0,85,0.6)] glow-pulse-red">
+                    <i class="fa-solid fa-headphones-simple text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-slate-200 to-rose-500 bg-clip-text text-transparent">
+                        NEON<span class="text-neonRed font-black">AUDIO</span>INDEX
+                    </h1>
+                    <p class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">Biblioteca Privada de Audiolibros</p>
+                </div>
+            </div>
+
+            <!-- Global Live Search Bar -->
+            <div class="relative w-full md:w-96 group">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-neonRed transition-colors"></i>
+                <input type="text" id="searchInput" placeholder="Buscar libro, autor o género..." 
+                    class="w-full pl-11 pr-10 py-2.5 rounded-full bg-slate-900/80 border border-slate-700/60 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-neonRed focus:ring-1 focus:ring-neonRed transition-all duration-300">
+                <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Actions Header -->
+            <div class="flex items-center gap-2">
+                <button onclick="openGenreModal()" class="ios-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-neonRed/10 border border-neonRed text-neonRed hover:bg-neonRed hover:text-white shadow-[0_0_15px_rgba(255,0,85,0.3)] flex items-center gap-2">
+                    <i class="fa-solid fa-folder-plus text-sm"></i>
+                    <span>Nuevo Género</span>
+                </button>
+                <!-- BOTÓN ÚNICO: GUARDAR Y RESPALDAR -->
+                <button onclick="saveAllChangesAndExport()" title="Guardar cambios y descargar copia de respaldo JSON" class="ios-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-2">
+                    <i class="fa-solid fa-floppy-disk text-sm"></i>
+                    <span>Guardar y Respaldo</span>
+                </button>
+                <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
+                <button onclick="document.getElementById('importFileInput').click()" title="Importar Respaldo JSON" class="ios-btn p-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-700 border border-slate-700 text-slate-300">
+                    <i class="fa-solid fa-upload text-sm"></i>
+                </button>
+                <button onclick="resetToDefaults()" title="Restablecer Datos por Defecto" class="ios-btn p-2.5 rounded-xl bg-slate-800/70 hover:bg-rose-950/40 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
+                    <i class="fa-solid fa-rotate-right text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto w-full px-4 lg:px-8 pt-6 flex-grow">
+        
+        <!-- Quick Stats Bar -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <div class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-neonRed">
+                <div>
+                    <span class="text-xs uppercase text-slate-400 font-medium">Géneros</span>
+                    <h3 id="statGenresCount" class="text-2xl font-bold font-mono text-white">0</h3>
+                </div>
+                <i class="fa-solid fa-layer-group text-slate-600 text-2xl"></i>
+            </div>
+            <div class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-cyan-400">
+                <div>
+                    <span class="text-xs uppercase text-slate-400 font-medium">Autores</span>
+                    <h3 id="statAuthorsCount" class="text-2xl font-bold font-mono text-white">0</h3>
+                </div>
+                <i class="fa-solid fa-user-pen text-slate-600 text-2xl"></i>
+            </div>
+            <div class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-emerald-400">
+                <div>
+                    <span class="text-xs uppercase text-slate-400 font-medium">Audiolibros</span>
+                    <h3 id="statBooksCount" class="text-2xl font-bold font-mono text-white">0</h3>
+                </div>
+                <i class="fa-solid fa-book-bookmark text-slate-600 text-2xl"></i>
+            </div>
+            <div class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-amber-400">
+                <div>
+                    <span class="text-xs uppercase text-slate-400 font-medium">Favoritos</span>
+                    <h3 id="statFavsCount" class="text-2xl font-bold font-mono text-white">0</h3>
+                </div>
+                <i class="fa-solid fa-heart text-slate-600 text-2xl"></i>
+            </div>
+        </div>
+
+        <!-- iOS Navigation Breadcrumbs & Back Bar -->
+        <div id="navigationBar" class="flex items-center justify-between bg-slate-900/60 border border-slate-800 rounded-2xl p-3 mb-6">
+            <div class="flex items-center gap-2 text-sm" id="breadcrumbs">
+                <!-- Dynamic breadcrumbs via JS -->
+            </div>
+            <div id="viewActions">
+                <!-- Action buttons based on active view -->
+            </div>
+        </div>
+
+        <!-- Dynamic Main Content Container -->
+        <div id="mainViewContainer" class="view-transition">
+            <!-- Rendered list view (Genres / Authors / Books) -->
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div id="emptyState" class="hidden text-center py-20 ios-glass rounded-3xl border border-dashed border-slate-800">
+            <i class="fa-solid fa-book-open-reader text-6xl text-slate-700 mb-4 animate-bounce"></i>
+            <h3 class="text-xl font-bold text-slate-300">No se encontraron resultados</h3>
+            <p class="text-slate-500 text-sm mt-1">Prueba con otra búsqueda o agrega un nuevo ítem a tu catálogo.</p>
+        </div>
+    </main>
+
+    <!-- MODALES DE GESTIÓN (CRUD) -->
+
+    <!-- Modal 1: Agregar/Editar Género -->
+    <div id="genreModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="ios-glass border border-slate-700 rounded-3xl p-6 w-full max-w-md modal-enter relative">
+            <div class="flex justify-between items-center mb-5">
+                <h3 id="genreModalTitle" class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-folder-plus text-neonRed"></i> Nuevo Género
+                </h3>
+                <button onclick="closeModal('genreModal')" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form id="genreForm" onsubmit="handleGenreSubmit(event)">
+                <input type="hidden" id="genreEditId">
+                <div class="mb-4">
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nombre del Género</label>
+                    <input type="text" id="genreNameInput" required placeholder="Ej: Psicología de Trading" 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-2">Color Neón Distintivo</label>
+                    <div class="grid grid-cols-4 sm:grid-cols-8 gap-2.5 max-h-40 overflow-y-auto p-1" id="colorPickerContainer">
+                        <!-- Dynamic Color Hex Swatches JS -->
+                    </div>
+                    <input type="hidden" id="genreColorInput" value="#00f3ff">
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('genreModal')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Cancelar</button>
+                    <button type="submit" class="ios-btn px-6 py-2.5 rounded-xl text-xs font-bold bg-neonRed text-white shadow-[0_0_15px_rgba(255,0,85,0.4)]">Guardar Género</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Agregar/Editar Autor -->
+    <div id="authorModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="ios-glass border border-slate-700 rounded-3xl p-6 w-full max-w-md modal-enter relative">
+            <div class="flex justify-between items-center mb-5">
+                <h3 id="authorModalTitle" class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-neonRed"></i> Nuevo Autor
+                </h3>
+                <button onclick="closeModal('authorModal')" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form id="authorForm" onsubmit="handleAuthorSubmit(event)">
+                <input type="hidden" id="authorGenreId">
+                <input type="hidden" id="authorEditId">
+                <div class="mb-4">
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nombre del Autor</label>
+                    <input type="text" id="authorNameInput" required placeholder="Ej: Mark Douglas" 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL Avatar/Foto (Opcional)</label>
+                    <input type="url" id="authorPhotoInput" placeholder="https://..." 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                </div>
+                <div class="mb-5">
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Biografía Breve</label>
+                    <textarea id="authorBioInput" rows="3" placeholder="Resumen o notas sobre el autor..." 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed resize-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('authorModal')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Cancelar</button>
+                    <button type="submit" class="ios-btn px-6 py-2.5 rounded-xl text-xs font-bold bg-neonRed text-white shadow-[0_0_15px_rgba(255,0,85,0.4)]">Guardar Autor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Agregar/Editar Audiolibro -->
+    <div id="bookModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="ios-glass border border-slate-700 rounded-3xl p-6 w-full max-w-lg modal-enter relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-5">
+                <h3 id="bookModalTitle" class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-book-medical text-neonRed"></i> Nuevo Audiolibro
+                </h3>
+                <button onclick="closeModal('bookModal')" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form id="bookForm" onsubmit="handleBookSubmit(event)">
+                <input type="hidden" id="bookGenreId">
+                <input type="hidden" id="bookAuthorId">
+                <input type="hidden" id="bookEditId">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Título del Libro (Nombre Completo)</label>
+                        <input type="text" id="bookTitleInput" required placeholder="Ej: Trading en la Zona" 
+                            class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Año de Lanzamiento</label>
+                        <input type="number" id="bookYearInput" placeholder="Ej: 2020" min="1800" max="2099" 
+                            class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Duración (Horas:Minutos)</label>
+                        <input type="text" id="bookDurationInput" placeholder="Ej: 7h 45m" 
+                            class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Estado de Lectura</label>
+                        <select id="bookStatusInput" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En Proceso">En Proceso</option>
+                            <option value="Escuchado">Escuchado</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL Portada / Carátula (Opcional)</label>
+                        <input type="url" id="bookCoverInput" placeholder="https://..." 
+                            class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Progreso (%)</label>
+                        <div class="flex items-center gap-4">
+                            <input type="range" id="bookProgressInput" min="0" max="100" value="0" oninput="document.getElementById('progVal').innerText = this.value + '%'" 
+                                class="flex-grow accent-neonRed">
+                            <span id="progVal" class="text-xs font-mono text-neonRed w-10 text-right">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeModal('bookModal')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Cancelar</button>
+                    <button type="submit" class="ios-btn px-6 py-2.5 rounded-xl text-xs font-bold bg-neonRed text-white shadow-[0_0_15px_rgba(255,0,85,0.4)]">Guardar Libro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 4: Perfil Detallado de Autor -->
+    <div id="authorDetailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="ios-glass border border-slate-700 rounded-3xl p-6 w-full max-w-xl modal-enter relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('authorDetailModal')" class="absolute right-4 top-4 text-slate-400 hover:text-white z-10">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="authorDetailContent">
+                <!-- Dynamic Content injected via JS -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // Default Seed Data
+        const DEFAULT_LIBRARY_DATA = [
+            {
+                id: 'genre-1',
+                name: 'Psicología de Trading',
+                color: '#00f3ff', // Cyan Neón
+                authors: [
+                    {
+                        id: 'auth-1',
+                        name: 'Mark Douglas',
+                        photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+                        bio: 'Pionero en la psicología del trading y la dinámica del riesgo mental en los mercados financieros.',
+                        books: [
+                            { id: 'b-1', title: 'Trading en la Zona: Mapeo mental del mercado', year: '2000', duration: '7h 20m', status: 'Escuchado', progress: 100, favorite: true, cover: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80' },
+                            { id: 'b-2', title: 'El Inversor Disciplinado', year: '1990', duration: '6h 45m', status: 'En Proceso', progress: 65, favorite: false, cover: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=600&q=80' }
+                        ]
+                    },
+                    {
+                        id: 'auth-2',
+                        name: 'Brett Steenbarger',
+                        photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
+                        bio: 'Doctor en Psicología clínica y coach de traders institucionales de alto rendimiento.',
+                        books: [
+                            { id: 'b-3', title: 'La Psicología del Trading: Herramientas para la autoconfianza', year: '2003', duration: '9h 15m', status: 'Pendiente', progress: 0, favorite: true, cover: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'genre-2',
+                name: 'Finanzas e Inversiones',
+                color: '#00ff88', // Verde Neón
+                authors: [
+                    {
+                        id: 'auth-3',
+                        name: 'Morgan Housel',
+                        photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80',
+                        bio: 'Socio de Collaborative Fund y ex-columnista de The Wall Street Journal.',
+                        books: [
+                            { id: 'b-4', title: 'La Psicología del Dinero: Lecciones intemporales sobre la riqueza', year: '2020', duration: '5h 48m', status: 'Escuchado', progress: 100, favorite: true, cover: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'genre-3',
+                name: 'Hábitos y Productividad',
+                color: '#ffb700', // Oro Neón
+                authors: [
+                    {
+                        id: 'auth-4',
+                        name: 'James Clear',
+                        photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80',
+                        bio: 'Escritor e investigador especializado en hábitos de alto rendimiento.',
+                        books: [
+                            { id: 'b-5', title: 'Hábitos Atómicos: Cambios pequeños, resultados extraordinarios', year: '2018', duration: '5h 35m', status: 'Escuchado', progress: 100, favorite: true, cover: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80' }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // 16 Neon Palette Options
+        const NEON_PALETTE = [
+            '#00f3ff', // Cyan Neón
+            '#00ff88', // Verde Neón
+            '#bf00ff', // Púrpura Neón
+            '#ffb700', // Oro/Amarillo Neón
+            '#ff0055', // Rojo Neón Principal
+            '#ff5500', // Naranja Fuego
+            '#ff00aa', // Rosa Chicle
+            '#a8ff00', // Verde Lima
+            '#00ffd5', // Turquesa Menta
+            '#7928ca', // Violeta Profundo
+            '#ff0033', // Carmesí
+            '#0070f3', // Azul Electrico
+            '#ff9900', // Ámbar Neón
+            '#39ff14', // Verde Neón Láser
+            '#f300ff', // Magenta Neón
+            '#00e5ff'  // Azul Cielo Neón
+        ];
+
+        // Application State
+        let libraryData = [];
+        let currentNavigation = {
+            view: 'genres', // 'genres', 'authors', 'books', 'search'
+            genreId: null,
+            authorId: null
+        };
+        let searchQuery = '';
+
+        // App Initialization
+        window.onload = function() {
+            loadLibraryData();
+            setupColorPicker();
+            setupEventListeners();
+            initBackgroundCanvas();
+            renderApp();
+        };
+
+        // Data Storage Logic
+        function loadLibraryData() {
+            const saved = localStorage.getItem('neon_audiobooks_db');
+            if (saved) {
+                try {
+                    libraryData = JSON.parse(saved);
+                } catch(e) {
+                    libraryData = DEFAULT_LIBRARY_DATA;
+                }
+            } else {
+                libraryData = DEFAULT_LIBRARY_DATA;
+                saveLibraryData();
+            }
+        }
+
+        function saveLibraryData() {
+            localStorage.setItem('neon_audiobooks_db', JSON.stringify(libraryData));
+            updateStats();
+        }
+
+        // UNIFICACIÓN DE GUARDAR + RESPALDO JSON
+        function saveAllChangesAndExport() {
+            // 1. Guardar en LocalStorage
+            saveLibraryData();
+            
+            // 2. Exportar el archivo JSON de Respaldo
+            exportData();
+            
+            // 3. Notificación de confirmación visual (Toast)
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 right-6 z-50 bg-emerald-950/90 border border-emerald-500 text-emerald-300 px-5 py-3 rounded-2xl shadow-[0_0_20px_rgba(16,185,129,0.4)] backdrop-blur-md flex items-center gap-3 font-semibold text-sm modal-enter';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-lg text-emerald-400"></i> Guardado y Respaldo generado con éxito.`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }, 2500);
+        }
+
+        function resetToDefaults() {
+            if(confirm('¿Estás seguro de restablecer la biblioteca a sus datos por defecto?')) {
+                libraryData = JSON.parse(JSON.stringify(DEFAULT_LIBRARY_DATA));
+                saveLibraryData();
+                navigateTo('genres');
+            }
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(libraryData, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `neon_audiobooks_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        libraryData = imported;
+                        saveLibraryData();
+                        navigateTo('genres');
+                        alert('¡Biblioteca importada con éxito!');
+                    } else {
+                        alert('El archivo JSON no tiene un formato válido.');
+                    }
+                } catch (err) {
+                    alert('Error al leer el archivo JSON.');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // Color Picker Setup
+        function setupColorPicker() {
+            const container = document.getElementById('colorPickerContainer');
+            container.innerHTML = NEON_PALETTE.map((color, index) => `
+                <button type="button" onclick="selectColor('${color}', this)" 
+                    class="w-7 h-7 rounded-full border border-white/20 transition-all duration-200 hover:scale-125 flex items-center justify-center color-swatch ${index === 0 ? 'ring-2 ring-white scale-110' : ''}" 
+                    style="background-color: ${color}; box-shadow: 0 0 10px ${color}80;">
+                </button>
+            `).join('');
+            document.getElementById('genreColorInput').value = NEON_PALETTE[0];
+        }
+
+        function selectColor(color, btnEl) {
+            document.getElementById('genreColorInput').value = color;
+            document.querySelectorAll('.color-swatch').forEach(el => {
+                el.classList.remove('ring-2', 'ring-white', 'scale-110');
+            });
+            btnEl.classList.add('ring-2', 'ring-white', 'scale-110');
+        }
+
+        // Search Input listeners
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.trim().toLowerCase();
+                if (searchQuery.length > 0) {
+                    clearBtn.classList.remove('hidden');
+                    if (currentNavigation.view !== 'search') {
+                        currentNavigation.view = 'search';
+                    }
+                } else {
+                    clearBtn.classList.add('hidden');
+                    if (currentNavigation.view === 'search') {
+                        currentNavigation.view = 'genres';
+                    }
+                }
+                renderApp();
+            });
+
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                clearBtn.classList.add('hidden');
+                currentNavigation.view = 'genres';
+                renderApp();
+            });
+        }
+
+        // Navigation Controller
+        function navigateTo(view, genreId = null, authorId = null) {
+            currentNavigation.view = view;
+            if (genreId !== null) currentNavigation.genreId = genreId;
+            if (authorId !== null) currentNavigation.authorId = authorId;
+
+            // Clear search if navigating manually
+            if (view !== 'search') {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('clearSearchBtn').classList.add('hidden');
+                searchQuery = '';
+            }
+
+            renderApp();
+        }
+
+        // Main App Renderer
+        function renderApp() {
+            updateStats();
+            renderBreadcrumbs();
+
+            const container = document.getElementById('mainViewContainer');
+            const emptyState = document.getElementById('emptyState');
+            container.innerHTML = '';
+            emptyState.classList.add('hidden');
+
+            if (currentNavigation.view === 'search' && searchQuery.length > 0) {
+                renderSearchResults(container, emptyState);
+            } else if (currentNavigation.view === 'genres') {
+                renderGenresView(container, emptyState);
+            } else if (currentNavigation.view === 'authors') {
+                renderAuthorsView(container, emptyState);
+            } else if (currentNavigation.view === 'books') {
+                renderBooksView(container, emptyState);
+            }
+        }
+
+        // Breadcrumbs & View Action Bar
+        function renderBreadcrumbs() {
+            const bc = document.getElementById('breadcrumbs');
+            const actions = document.getElementById('viewActions');
+
+            let bcHtml = `
+                <button onclick="navigateTo('genres')" class="flex items-center gap-1.5 text-slate-400 hover:text-white font-medium">
+                    <i class="fa-solid fa-layer-group text-neonRed text-xs"></i>
+                    <span>Géneros</span>
+                </button>
+            `;
+
+            if (currentNavigation.view === 'authors' && currentNavigation.genreId) {
+                const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+                if (genre) {
+                    bcHtml += `
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
+                        <span class="font-bold text-white flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full" style="background-color:${genre.color}"></span>
+                            ${genre.name}
+                        </span>
+                    `;
+                }
+                actions.innerHTML = `
+                    <button onclick="openAuthorModal('${currentNavigation.genreId}')" class="ios-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 border border-slate-700 text-slate-200 hover:border-white flex items-center gap-2">
+                        <i class="fa-solid fa-user-plus text-neonRed"></i>
+                        <span>Agregar Autor</span>
+                    </button>
+                `;
+            } else if (currentNavigation.view === 'books' && currentNavigation.genreId && currentNavigation.authorId) {
+                const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+                const author = genre ? genre.authors.find(a => a.id === currentNavigation.authorId) : null;
+                
+                if (genre && author) {
+                    bcHtml += `
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
+                        <button onclick="navigateTo('authors', '${genre.id}')" class="text-slate-400 hover:text-white">
+                            ${genre.name}
+                        </button>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
+                        <span class="font-bold text-white">${author.name}</span>
+                    `;
+                }
+                actions.innerHTML = `
+                    <button onclick="openBookModal('${currentNavigation.genreId}', '${currentNavigation.authorId}')" class="ios-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 border border-slate-700 text-slate-200 hover:border-white flex items-center gap-2">
+                        <i class="fa-solid fa-book-medical text-neonRed"></i>
+                        <span>Agregar Libro</span>
+                    </button>
+                `;
+            } else if (currentNavigation.view === 'search') {
+                bcHtml = `
+                    <span class="text-slate-400 flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass text-neonRed"></i>
+                        Resultados para: <strong class="text-white">"${searchQuery}"</strong>
+                    </span>
+                `;
+                actions.innerHTML = '';
+            } else { // 'genres'
+                actions.innerHTML = `
+                    <span class="text-xs text-slate-400 font-mono"><i class="fa-solid fa-grip-vertical mr-1"></i> Arrastra para reordenar</span>
+                `;
+            }
+
+            bc.innerHTML = bcHtml;
+        }
+
+        // View 1: Genres View (Lista Vertical de Géneros)
+        function renderGenresView(container, emptyState) {
+            if (libraryData.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            const list = document.createElement('div');
+            list.className = 'flex flex-col gap-3';
+            list.id = 'genresList';
+
+            libraryData.forEach((genre, index) => {
+                const totalAuthors = genre.authors.length;
+                const totalBooks = genre.authors.reduce((acc, a) => acc + a.books.length, 0);
+
+                const item = document.createElement('div');
+                item.className = 'ios-glass-card p-4 md:p-5 flex items-center justify-between gap-4 cursor-pointer draggable-item';
+                item.setAttribute('draggable', 'true');
+                item.dataset.index = index;
+                item.dataset.type = 'genre';
+                item.style.setProperty('--genre-neon', genre.color);
+                item.style.setProperty('--genre-glow', `${genre.color}40`);
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-4 flex-grow min-w-0" onclick="navigateTo('authors', '${genre.id}')">
+                        <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-slate-300 p-1 drag-handle" onclick="event.stopPropagation()">
+                            <i class="fa-solid fa-grip-vertical text-lg"></i>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg" 
+                            style="background-color: ${genre.color}20; border: 1px solid ${genre.color}; box-shadow: 0 0 15px ${genre.color}40">
+                            <i class="fa-solid fa-folder-open text-xl" style="color: ${genre.color}"></i>
+                        </div>
+                        <div class="truncate">
+                            <h3 class="text-lg font-bold text-white group-hover:text-neonRed transition-colors truncate flex items-center gap-2">
+                                ${genre.name}
+                            </h3>
+                            <div class="flex items-center gap-3 text-xs text-slate-400 mt-1 font-mono">
+                                <span><i class="fa-solid fa-user-pen mr-1"></i>${totalAuthors} Autores</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-book mr-1"></i>${totalBooks} Libros</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button onclick="event.stopPropagation(); openGenreModal('${genre.id}')" 
+                            title="Editar Género"
+                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1.5 text-xs font-semibold">
+                            <i class="fa-solid fa-pen-to-square text-cyan-400"></i>
+                            <span class="hidden sm:inline">Editar</span>
+                        </button>
+                        <button onclick="event.stopPropagation(); deleteGenre('${genre.id}')" 
+                            title="Eliminar Género"
+                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/60 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400 flex items-center gap-1.5 text-xs font-semibold">
+                            <i class="fa-solid fa-trash-can text-rose-500"></i>
+                            <span class="hidden sm:inline">Eliminar</span>
+                        </button>
+                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400" onclick="navigateTo('authors', '${genre.id}')">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            container.appendChild(list);
+            setupDragAndDrop(list, 'genre');
+        }
+
+        // View 2: Authors View (Lista de Autores del Género Seleccionado)
+        function renderAuthorsView(container, emptyState) {
+            const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+            if (!genre || genre.authors.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            const list = document.createElement('div');
+            list.className = 'flex flex-col gap-3';
+            list.id = 'authorsList';
+
+            genre.authors.forEach((author, index) => {
+                const totalBooks = author.books.length;
+
+                const item = document.createElement('div');
+                item.className = 'ios-glass-card p-4 md:p-5 flex items-center justify-between gap-4 cursor-pointer draggable-item';
+                item.setAttribute('draggable', 'true');
+                item.dataset.index = index;
+                item.dataset.type = 'author';
+                item.style.setProperty('--genre-neon', genre.color);
+                item.style.setProperty('--genre-glow', `${genre.color}40`);
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-4 flex-grow min-w-0" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
+                        <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-slate-300 p-1 drag-handle" onclick="event.stopPropagation()">
+                            <i class="fa-solid fa-grip-vertical text-lg"></i>
+                        </div>
+                        
+                        <!-- Foto de Autor Rectangular Vertical Grande (80px x 112px) -->
+                        <div class="w-20 h-28 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border"
+                            style="border-color: ${genre.color}; box-shadow: 0 0 12px ${genre.color}30">
+                            ${author.photo ? 
+                                `<img src="${author.photo}" alt="${author.name}" class="w-full h-full object-cover">` : 
+                                `<i class="fa-solid fa-user text-3xl" style="color: ${genre.color}"></i>`}
+                        </div>
+
+                        <div class="truncate">
+                            <h3 class="text-lg font-bold text-white truncate flex items-center gap-2">
+                                ${author.name}
+                            </h3>
+                            <p class="text-xs text-slate-400 line-clamp-2 mt-1 font-sans">${author.bio || 'Sin biografía disponible.'}</p>
+                            <div class="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px]" style="background-color:${genre.color}20; color:${genre.color}; border: 1px solid ${genre.color}40">
+                                    <i class="fa-solid fa-book-bookmark mr-1"></i>${totalBooks} Audiolibros
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button onclick="event.stopPropagation(); openAuthorDetailModal('${genre.id}', '${author.id}')" 
+                            title="Ver Perfil"
+                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
+                            <i class="fa-solid fa-eye text-cyan-400"></i>
+                        </button>
+                        <button onclick="event.stopPropagation(); openAuthorModal('${genre.id}', '${author.id}')" 
+                            title="Editar Autor"
+                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
+                            <i class="fa-solid fa-pen-to-square text-amber-400"></i>
+                        </button>
+                        <button onclick="event.stopPropagation(); deleteAuthor('${genre.id}', '${author.id}')" 
+                            title="Eliminar Autor"
+                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/60 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
+                            <i class="fa-solid fa-trash-can text-rose-500"></i>
+                        </button>
+                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            container.appendChild(list);
+            setupDragAndDrop(list, 'author');
+        }
+
+        // View 3: Books View (Lista Rectangular Completa de Audiolibros)
+        function renderBooksView(container, emptyState) {
+            const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+            const author = genre ? genre.authors.find(a => a.id === currentNavigation.authorId) : null;
+
+            if (!genre || !author || author.books.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            const list = document.createElement('div');
+            list.className = 'flex flex-col gap-3';
+            list.id = 'booksList';
+
+            author.books.forEach((book, index) => {
+                const item = document.createElement('div');
+                item.className = 'ios-glass-card p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 draggable-item';
+                item.setAttribute('draggable', 'true');
+                item.dataset.index = index;
+                item.dataset.type = 'book';
+                item.style.setProperty('--genre-neon', genre.color);
+                item.style.setProperty('--genre-glow', `${genre.color}40`);
+
+                item.innerHTML = `
+                    <div class="flex items-start sm:items-center gap-4 flex-grow min-w-0 w-full">
+                        <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-slate-300 p-1 drag-handle self-center">
+                            <i class="fa-solid fa-grip-vertical text-lg"></i>
+                        </div>
+
+                        <!-- Portada Rectangular Vertical Tipo Libro 2:3 (96px x 144px) -->
+                        <div class="w-24 h-36 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border shadow-xl relative group"
+                            style="border-color: ${genre.color}; box-shadow: 0 0 15px ${genre.color}25">
+                            ${book.cover ? 
+                                `<img src="${book.cover}" alt="${book.title}" class="w-full h-full object-cover">` : 
+                                `<i class="fa-solid fa-book-open text-3xl text-slate-700"></i>`}
+                        </div>
+
+                        <div class="flex-grow min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap mb-1">
+                                <span class="neon-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider" style="--genre-neon: ${genre.color}; --genre-glow: ${genre.color}40">
+                                    ${genre.name}
+                                </span>
+                                ${book.year ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md"><i class="fa-solid fa-calendar-day mr-1"></i>${book.year}</span>` : ''}
+                                <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${book.status}</span>
+                            </div>
+
+                            <!-- Título Completo sin cortar -->
+                            <h3 class="text-base sm:text-lg font-bold text-white break-words leading-snug">
+                                ${book.title}
+                            </h3>
+                            <p class="text-xs text-slate-400 font-medium mt-1">
+                                <i class="fa-solid fa-user-pen mr-1" style="color: ${genre.color}"></i> ${author.name}
+                            </p>
+
+                            <!-- Barra de Progreso Neón -->
+                            <div class="mt-3 max-w-md">
+                                <div class="flex justify-between text-[11px] font-mono text-slate-400 mb-1">
+                                    <span>${book.duration || 'Duración N/D'}</span>
+                                    <span style="color: ${genre.color}">${book.progress || 0}%</span>
+                                </div>
+                                <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                                    <div class="h-full rounded-full transition-all duration-500" 
+                                        style="width: ${book.progress || 0}%; background-color: ${genre.color}; box-shadow: 0 0 10px ${genre.color}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                        <button onclick="toggleFavorite('${genre.id}', '${author.id}', '${book.id}')" 
+                            title="Favorito"
+                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
+                            <i class="${book.favorite ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart text-slate-500'} text-base"></i>
+                        </button>
+                        <button onclick="openBookModal('${genre.id}', '${author.id}', '${book.id}')" 
+                            title="Editar Audiolibro"
+                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
+                            <i class="fa-solid fa-pen-to-square text-amber-400 text-base"></i>
+                        </button>
+                        <button onclick="deleteBook('${genre.id}', '${author.id}', '${book.id}')" 
+                            title="Eliminar Audiolibro"
+                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/60 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
+                            <i class="fa-solid fa-trash-can text-rose-500 text-base"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            container.appendChild(list);
+            setupDragAndDrop(list, 'book');
+        }
+
+        // View 4: Search Global Results
+        function renderSearchResults(container, emptyState) {
+            let matchingBooks = [];
+
+            libraryData.forEach(genre => {
+                genre.authors.forEach(author => {
+                    author.books.forEach(book => {
+                        const matchTitle = book.title.toLowerCase().includes(searchQuery);
+                        const matchAuthor = author.name.toLowerCase().includes(searchQuery);
+                        const matchGenre = genre.name.toLowerCase().includes(searchQuery);
+                        const matchYear = book.year ? book.year.toString().includes(searchQuery) : false;
+
+                        if (matchTitle || matchAuthor || matchGenre || matchYear) {
+                            matchingBooks.push({ book, author, genre });
+                        }
+                    });
+                });
+            });
+
+            if (matchingBooks.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            const list = document.createElement('div');
+            list.className = 'flex flex-col gap-3';
+
+            matchingBooks.forEach(({ book, author, genre }) => {
+                const item = document.createElement('div');
+                item.className = 'ios-glass-card p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+                item.style.setProperty('--genre-neon', genre.color);
+                item.style.setProperty('--genre-glow', `${genre.color}40`);
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-4 flex-grow min-w-0">
+                        <div class="w-20 h-28 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border"
+                            style="border-color: ${genre.color}; box-shadow: 0 0 10px ${genre.color}30">
+                            ${book.cover ? 
+                                `<img src="${book.cover}" alt="${book.title}" class="w-full h-full object-cover">` : 
+                                `<i class="fa-solid fa-book-open text-2xl text-slate-700"></i>`}
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="neon-badge px-2 py-0.5 rounded-full text-[10px] font-mono font-bold" style="--genre-neon: ${genre.color}; --genre-glow: ${genre.color}40">
+                                    ${genre.name}
+                                </span>
+                                ${book.year ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${book.year}</span>` : ''}
+                            </div>
+                            <h3 class="text-base font-bold text-white break-words">${book.title}</h3>
+                            <p class="text-xs text-slate-400 mt-0.5 font-medium">${author.name}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="navigateTo('books', '${genre.id}', '${author.id}')" class="ios-btn px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-semibold text-white hover:bg-slate-700">
+                            Ir al Libro <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            container.appendChild(list);
+        }
+
+        // Drag & Drop iOS Handler
+        function setupDragAndDrop(listElement, itemType) {
+            let dragSrcEl = null;
+
+            const items = listElement.querySelectorAll('.draggable-item');
+            items.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    dragSrcEl = this;
+                    this.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                item.addEventListener('dragover', function(e) {
+                    if (e.preventDefault) e.preventDefault();
+                    this.classList.add('drag-over');
+                    return false;
+                });
+
+                item.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over');
+                });
+
+                item.addEventListener('drop', function(e) {
+                    if (e.stopPropagation) e.stopPropagation();
+                    this.classList.remove('drag-over');
+
+                    if (dragSrcEl !== this) {
+                        const fromIndex = parseInt(dragSrcEl.dataset.index);
+                        const toIndex = parseInt(this.dataset.index);
+
+                        if (itemType === 'genre') {
+                            const moved = libraryData.splice(fromIndex, 1)[0];
+                            libraryData.splice(toIndex, 0, moved);
+                        } else if (itemType === 'author') {
+                            const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+                            if (genre) {
+                                const moved = genre.authors.splice(fromIndex, 1)[0];
+                                genre.authors.splice(toIndex, 0, moved);
+                            }
+                        } else if (itemType === 'book') {
+                            const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+                            const author = genre ? genre.authors.find(a => a.id === currentNavigation.authorId) : null;
+                            if (author) {
+                                const moved = author.books.splice(fromIndex, 1)[0];
+                                author.books.splice(toIndex, 0, moved);
+                            }
+                        }
+
+                        saveLibraryData();
+                        renderApp();
+                    }
+                    return false;
+                });
+
+                item.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                    items.forEach(i => i.classList.remove('drag-over'));
+                });
+            });
+        }
+
+        // CRUD Modals Logic
+        function openGenreModal(genreId = null) {
+            const modal = document.getElementById('genreModal');
+            const title = document.getElementById('genreModalTitle');
+            const nameInput = document.getElementById('genreNameInput');
+            const editId = document.getElementById('genreEditId');
+
+            if (genreId) {
+                const genre = libraryData.find(g => g.id === genreId);
+                if (genre) {
+                    title.innerHTML = `<i class="fa-solid fa-pen-to-square text-neonRed"></i> Editar Género`;
+                    nameInput.value = genre.name;
+                    editId.value = genre.id;
+                    selectColor(genre.color, document.querySelector(`.color-swatch[style*="${genre.color}"]`) || document.querySelectorAll('.color-swatch')[0]);
+                }
+            } else {
+                title.innerHTML = `<i class="fa-solid fa-folder-plus text-neonRed"></i> Nuevo Género`;
+                nameInput.value = '';
+                editId.value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function handleGenreSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('genreEditId').value;
+            const name = document.getElementById('genreNameInput').value.trim();
+            const color = document.getElementById('genreColorInput').value;
+
+            if (id) {
+                const genre = libraryData.find(g => g.id === id);
+                if (genre) {
+                    genre.name = name;
+                    genre.color = color;
+                }
+            } else {
+                const newGenre = {
+                    id: 'genre-' + Date.now(),
+                    name: name,
+                    color: color,
+                    authors: []
+                };
+                libraryData.push(newGenre);
+            }
+
+            saveLibraryData();
+            closeModal('genreModal');
+            renderApp();
+        }
+
+        function deleteGenre(genreId) {
+            if (confirm('¿Deseas eliminar este género y todos sus autores y audiolibros vinculados?')) {
+                libraryData = libraryData.filter(g => g.id !== genreId);
+                saveLibraryData();
+                renderApp();
+            }
+        }
+
+        function openAuthorModal(genreId, authorId = null) {
+            const modal = document.getElementById('authorModal');
+            const title = document.getElementById('authorModalTitle');
+            const nameInput = document.getElementById('authorNameInput');
+            const photoInput = document.getElementById('authorPhotoInput');
+            const bioInput = document.getElementById('authorBioInput');
+            const genreIdHidden = document.getElementById('authorGenreId');
+            const editId = document.getElementById('authorEditId');
+
+            genreIdHidden.value = genreId;
+
+            if (authorId) {
+                const genre = libraryData.find(g => g.id === genreId);
+                const author = genre ? genre.authors.find(a => a.id === authorId) : null;
+                if (author) {
+                    title.innerHTML = `<i class="fa-solid fa-user-pen text-neonRed"></i> Editar Autor`;
+                    nameInput.value = author.name;
+                    photoInput.value = author.photo || '';
+                    bioInput.value = author.bio || '';
+                    editId.value = author.id;
+                }
+            } else {
+                title.innerHTML = `<i class="fa-solid fa-user-plus text-neonRed"></i> Nuevo Autor`;
+                nameInput.value = '';
+                photoInput.value = '';
+                bioInput.value = '';
+                editId.value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function handleAuthorSubmit(e) {
+            e.preventDefault();
+            const genreId = document.getElementById('authorGenreId').value;
+            const authorId = document.getElementById('authorEditId').value;
+            const name = document.getElementById('authorNameInput').value.trim();
+            const photo = document.getElementById('authorPhotoInput').value.trim();
+            const bio = document.getElementById('authorBioInput').value.trim();
+
+            const genre = libraryData.find(g => g.id === genreId);
+            if (!genre) return;
+
+            if (authorId) {
+                const author = genre.authors.find(a => a.id === authorId);
+                if (author) {
+                    author.name = name;
+                    author.photo = photo;
+                    author.bio = bio;
+                }
+            } else {
+                const newAuthor = {
+                    id: 'auth-' + Date.now(),
+                    name: name,
+                    photo: photo,
+                    bio: bio,
+                    books: []
+                };
+                genre.authors.push(newAuthor);
+            }
+
+            saveLibraryData();
+            closeModal('authorModal');
+            renderApp();
+        }
+
+        function deleteAuthor(genreId, authorId) {
+            if (confirm('¿Eliminar este autor y sus libros vinculados?')) {
+                const genre = libraryData.find(g => g.id === genreId);
+                if (genre) {
+                    genre.authors = genre.authors.filter(a => a.id !== authorId);
+                    saveLibraryData();
+                    renderApp();
+                }
+            }
+        }
+
+        function openBookModal(genreId, authorId, bookId = null) {
+            const modal = document.getElementById('bookModal');
+            const title = document.getElementById('bookModalTitle');
+            const titleInput = document.getElementById('bookTitleInput');
+            const yearInput = document.getElementById('bookYearInput');
+            const durationInput = document.getElementById('bookDurationInput');
+            const statusInput = document.getElementById('bookStatusInput');
+            const coverInput = document.getElementById('bookCoverInput');
+            const progressInput = document.getElementById('bookProgressInput');
+            const progVal = document.getElementById('progVal');
+            
+            document.getElementById('bookGenreId').value = genreId;
+            document.getElementById('bookAuthorId').value = authorId;
+            const editId = document.getElementById('bookEditId');
+
+            if (bookId) {
+                const genre = libraryData.find(g => g.id === genreId);
+                const author = genre ? genre.authors.find(a => a.id === authorId) : null;
+                const book = author ? author.books.find(b => b.id === bookId) : null;
+
+                if (book) {
+                    title.innerHTML = `<i class="fa-solid fa-pen-to-square text-neonRed"></i> Editar Audiolibro`;
+                    titleInput.value = book.title;
+                    yearInput.value = book.year || '';
+                    durationInput.value = book.duration || '';
+                    statusInput.value = book.status || 'Pendiente';
+                    coverInput.value = book.cover || '';
+                    progressInput.value = book.progress || 0;
+                    progVal.innerText = (book.progress || 0) + '%';
+                    editId.value = book.id;
+                }
+            } else {
+                title.innerHTML = `<i class="fa-solid fa-book-medical text-neonRed"></i> Nuevo Audiolibro`;
+                titleInput.value = '';
+                yearInput.value = '';
+                durationInput.value = '';
+                statusInput.value = 'Pendiente';
+                coverInput.value = '';
+                progressInput.value = 0;
+                progVal.innerText = '0%';
+                editId.value = '';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function handleBookSubmit(e) {
+            e.preventDefault();
+            const genreId = document.getElementById('bookGenreId').value;
+            const authorId = document.getElementById('bookAuthorId').value;
+            const bookId = document.getElementById('bookEditId').value;
+
+            const title = document.getElementById('bookTitleInput').value.trim();
+            const year = document.getElementById('bookYearInput').value;
+            const duration = document.getElementById('bookDurationInput').value.trim();
+            const status = document.getElementById('bookStatusInput').value;
+            const cover = document.getElementById('bookCoverInput').value.trim();
+            const progress = parseInt(document.getElementById('bookProgressInput').value) || 0;
+
+            const genre = libraryData.find(g => g.id === genreId);
+            const author = genre ? genre.authors.find(a => a.id === authorId) : null;
+            if (!author) return;
+
+            if (bookId) {
+                const book = author.books.find(b => b.id === bookId);
+                if (book) {
+                    book.title = title;
+                    book.year = year;
+                    book.duration = duration;
+                    book.status = status;
+                    book.cover = cover;
+                    book.progress = progress;
+                }
+            } else {
+                const newBook = {
+                    id: 'b-' + Date.now(),
+                    title: title,
+                    year: year,
+                    duration: duration,
+                    status: status,
+                    progress: progress,
+                    favorite: false,
+                    cover: cover
+                };
+                author.books.push(newBook);
+            }
+
+            saveLibraryData();
+            closeModal('bookModal');
+            renderApp();
+        }
+
+        function deleteBook(genreId, authorId, bookId) {
+            if (confirm('¿Deseas eliminar este audiolibro?')) {
+                const genre = libraryData.find(g => g.id === genreId);
+                const author = genre ? genre.authors.find(a => a.id === authorId) : null;
+                if (author) {
+                    author.books = author.books.filter(b => b.id !== bookId);
+                    saveLibraryData();
+                    renderApp();
+                }
+            }
+        }
+
+        function toggleFavorite(genreId, authorId, bookId) {
+            const genre = libraryData.find(g => g.id === genreId);
+            const author = genre ? genre.authors.find(a => a.id === authorId) : null;
+            const book = author ? author.books.find(b => b.id === bookId) : null;
+            if (book) {
+                book.favorite = !book.favorite;
+                saveLibraryData();
+                renderApp();
+            }
+        }
+
+        function openAuthorDetailModal(genreId, authorId) {
+            const genre = libraryData.find(g => g.id === genreId);
+            const author = genre ? genre.authors.find(a => a.id === authorId) : null;
+            if (!author) return;
+
+            const content = document.getElementById('authorDetailContent');
+            content.innerHTML = `
+                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+                    <div class="w-24 h-36 rounded-2xl overflow-hidden bg-slate-950 shrink-0 border border-slate-700 shadow-2xl"
+                        style="border-color: ${genre.color}; box-shadow: 0 0 15px ${genre.color}40">
+                        ${author.photo ? `<img src="${author.photo}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-user text-4xl" style="color:${genre.color}"></i></div>`}
+                    </div>
+                    <div>
+                        <span class="neon-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase" style="--genre-neon:${genre.color}; --genre-glow:${genre.color}40">${genre.name}</span>
+                        <h2 class="text-2xl font-extrabold text-white mt-1">${author.name}</h2>
+                        <p class="text-slate-300 text-sm mt-3 leading-relaxed">${author.bio || 'Sin biografía registrada.'}</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-5 border-t border-slate-800">
+                    <h4 class="text-xs font-mono uppercase text-slate-400 mb-3">Audiolibros Publicados (${author.books.length})</h4>
+                    <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                        ${author.books.map(b => `
+                            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    <div class="w-10 h-14 rounded overflow-hidden bg-slate-950 shrink-0">
+                                        ${b.cover ? `<img src="${b.cover}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-slate-700"><i class="fa-solid fa-book"></i></div>`}
+                                    </div>
+                                    <span class="text-sm font-semibold text-slate-200 truncate">${b.title}</span>
+                                </div>
+                                <span class="text-xs font-mono text-slate-400 shrink-0">${b.year || ''}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('authorDetailModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function updateStats() {
+            let totalGenres = libraryData.length;
+            let totalAuthors = 0;
+            let totalBooks = 0;
+            let totalFavs = 0;
+
+            libraryData.forEach(g => {
+                totalAuthors += g.authors.length;
+                g.authors.forEach(a => {
+                    totalBooks += a.books.length;
+                    totalFavs += a.books.filter(b => b.favorite).length;
+                });
+            });
+
+            document.getElementById('statGenresCount').innerText = totalGenres;
+            document.getElementById('statAuthorsCount').innerText = totalAuthors;
+            document.getElementById('statBooksCount').innerText = totalBooks;
+            document.getElementById('statFavsCount').innerText = totalFavs;
+        }
+
+        // Canvas Particle Background
+        function initBackgroundCanvas() {
+            const canvas = document.getElementById('bgCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            for (let i = 0; i < 45; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1,
+                    color: Math.random() > 0.5 ? '#ff0055' : '#00f3ff',
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    alpha: Math.random() * 0.4 + 0.1
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.x > canvas.width) p.x = 0;
+                    if (p.y < 0) p.y = canvas.height;
+                    if (p.y > canvas.height) p.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.alpha;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = p.color;
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>

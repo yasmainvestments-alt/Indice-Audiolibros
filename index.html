@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audiolibros CyberNeon Index</title>
+    <title>YasmaStark Audiobook Library</title>
     <!-- Favicon para la pestaña del navegador -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%2307070a'/><path d='M256 96c-79.5 0-144 64.5-144 144v112c0 26.5 21.5 48 48 48h16c17.7 0 32-14.3 32-32V288c0-17.7-14.3-32-32-32h-32v-16c0-61.9 50.1-112 112-112s112 50.1 112 112v16h-32c-17.7 0-32 14.3-32 32v80c0 17.7 14.3 32 32 32h16c26.5 0 48-21.5 48-48V240c0-79.5-64.5-144-144-144z' fill='%23ff0055'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%2307070a'/><path d='M256 96c-79.5 0-144 64.5-144 144v112c0 26.5 21.5 48 48 48h16c17.7 0 32-14.3 32-32V288c0-17.7-14.3-32-32-32h-32v-16c0-61.9 50.1-112 112-112s112 50.1 112-112v16h-32c-17.7 0-32 14.3-32 32v80c0 17.7 14.3 32 32 32h16c26.5 0 48-21.5 48-48V240c0-79.5-64.5-144-144-144z' fill='%23ff0055'/></svg>">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -152,13 +152,13 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-slate-200 to-rose-500 bg-clip-text text-transparent">
-                        NEON<span class="text-neonRed font-black">AUDIO</span>INDEX
+                        YasmaStark <span class="text-neonRed font-black">Audiobook Library</span>
                     </h1>
                     <p class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">Biblioteca Privada de Audiolibros</p>
                 </div>
             </div>
 
-            <!-- Buscador Global corregido para Name, Year y Title -->
+            <!-- Buscador Global -->
             <div class="relative w-full md:w-96 group">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-neonRed transition-colors"></i>
                 <input type="text" id="searchInput" placeholder="Buscar autor (ej: Robin Sharma), año o título..." 
@@ -173,9 +173,9 @@
                     <i class="fa-solid fa-folder-plus text-sm"></i>
                     <span>Nuevo Género</span>
                 </button>
-                <button onclick="saveAllChangesAndExport()" title="Guardar cambios y descargar salva.json" class="ios-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-2">
-                    <i class="fa-solid fa-floppy-disk text-sm"></i>
-                    <span>Guardar y Respaldo</span>
+                <!-- Botón de Guardar y Respaldo -->
+                <button onclick="saveAllChangesAndExport()" title="Guardar cambios y descargar salva.json" class="ios-btn p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center justify-center">
+                    <i class="fa-solid fa-floppy-disk text-base"></i>
                 </button>
                 <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
                 <button onclick="document.getElementById('importFileInput').click()" title="Importar Respaldo JSON" class="ios-btn p-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-700 border border-slate-700 text-slate-300">
@@ -191,33 +191,34 @@
     <main class="max-w-7xl mx-auto w-full px-4 lg:px-8 pt-6 flex-grow">
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            <div class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-neonRed">
+            <div onclick="navigateTo('genres')" class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-neonRed cursor-pointer hover:bg-slate-800/40 transition-colors">
                 <div>
                     <span class="text-xs uppercase text-slate-400 font-medium">Géneros</span>
                     <h3 id="statGenresCount" class="text-2xl font-bold font-mono text-white">0</h3>
                 </div>
                 <i class="fa-solid fa-layer-group text-slate-600 text-2xl"></i>
             </div>
-            <div class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-cyan-400">
+            <div onclick="navigateTo('genres')" class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-cyan-400 cursor-pointer hover:bg-slate-800/40 transition-colors">
                 <div>
                     <span class="text-xs uppercase text-slate-400 font-medium">Autores</span>
                     <h3 id="statAuthorsCount" class="text-2xl font-bold font-mono text-white">0</h3>
                 </div>
                 <i class="fa-solid fa-user-pen text-slate-600 text-2xl"></i>
             </div>
-            <div class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-emerald-400">
+            <div onclick="navigateTo('genres')" class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-emerald-400 cursor-pointer hover:bg-slate-800/40 transition-colors">
                 <div>
                     <span class="text-xs uppercase text-slate-400 font-medium">Audiolibros</span>
                     <h3 id="statBooksCount" class="text-2xl font-bold font-mono text-white">0</h3>
                 </div>
                 <i class="fa-solid fa-book-bookmark text-slate-600 text-2xl"></i>
             </div>
-            <div class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-amber-400">
+            <!-- Estadísticas Favoritos Interactivas -->
+            <div onclick="navigateTo('favorites')" class="ios-glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-amber-400 cursor-pointer hover:bg-amber-500/10 border border-amber-500/30 transition-all glow-pulse">
                 <div>
-                    <span class="text-xs uppercase text-slate-400 font-medium">Favoritos</span>
-                    <h3 id="statFavsCount" class="text-2xl font-bold font-mono text-white">0</h3>
+                    <span class="text-xs uppercase text-amber-400 font-bold tracking-wider">Favoritos</span>
+                    <h3 id="statFavsCount" class="text-2xl font-bold font-mono text-amber-300">0</h3>
                 </div>
-                <i class="fa-solid fa-heart text-slate-600 text-2xl"></i>
+                <i class="fa-solid fa-heart text-amber-400 text-2xl"></i>
             </div>
         </div>
 
@@ -268,7 +269,7 @@
         </div>
     </div>
 
-    <!-- Modal 2: Autor -->
+    <!-- Modal 2: Autor (Con Campo de Google Drive) -->
     <div id="authorModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
         <div class="ios-glass border border-slate-700 rounded-3xl p-6 w-full max-w-md modal-enter relative">
             <div class="flex justify-between items-center mb-5">
@@ -296,6 +297,13 @@
                     <label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL Avatar/Foto (Opcional)</label>
                     <input type="url" id="authorPhotoInput" placeholder="https://..." 
                         class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1 flex items-center gap-1.5 text-blue-400">
+                        <i class="fa-brands fa-google-drive text-sm"></i> Enlace Google Drive (Autor)
+                    </label>
+                    <input type="url" id="authorDriveInput" placeholder="https://drive.google.com/..." 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-blue-500">
                 </div>
                 <div class="mb-5">
                     <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Biografía Breve</label>
@@ -416,6 +424,7 @@
                         name: 'Robin Sharma',
                         year: '1964',
                         photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80',
+                        driveUrl: '',
                         bio: 'Experto mundial en liderazgo, autor de El Club de las 5 de la mañana y El monje que vendió su Ferrari.',
                         books: [
                             { id: 'b-101', title: 'El Club de las 5 de la mañana', year: '2018', duration: '11h 00m', status: 'Escuchado', progress: 100, favorite: true, cover: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80', isFisico: true, isAudio: true, audioUrl: '' }
@@ -435,6 +444,12 @@
         let searchQuery = '';
         let authorsSort = 'name-asc';
         let booksSort = 'year-desc';
+
+        // Modos de vista ('list' o 'grid') para Autores y Libros
+        let displayMode = {
+            authors: 'list',
+            books: 'list'
+        };
 
         // Helper para eliminar acentos en búsquedas
         function cleanString(str) {
@@ -566,6 +581,11 @@
             });
         }
 
+        function toggleDisplayMode(view) {
+            displayMode[view] = displayMode[view] === 'list' ? 'grid' : 'list';
+            renderApp();
+        }
+
         function navigateTo(view, genreId = null, authorId = null) {
             currentNavigation.view = view;
             if (genreId !== null) currentNavigation.genreId = genreId;
@@ -577,6 +597,49 @@
                 searchQuery = '';
             }
 
+            renderApp();
+        }
+
+        function handleSortAuthors(sortValue) {
+            authorsSort = sortValue;
+            const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+            if (genre) {
+                const arr = genre.authors || genre.autores || [];
+                arr.sort((a, b) => {
+                    const nameA = a.name || a.nombre || '';
+                    const nameB = b.name || b.nombre || '';
+                    const yearA = parseInt(a.year || a.año) || 0;
+                    const yearB = parseInt(b.year || b.año) || 0;
+
+                    if (authorsSort === 'name-asc') return nameA.localeCompare(nameB);
+                    if (authorsSort === 'name-desc') return nameB.localeCompare(nameA);
+                    if (authorsSort === 'year-asc') return yearA - yearB;
+                    if (authorsSort === 'year-desc') return yearB - yearA;
+                });
+                saveLibraryData();
+            }
+            renderApp();
+        }
+
+        function handleSortBooks(sortValue) {
+            booksSort = sortValue;
+            const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+            const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === currentNavigation.authorId) : null;
+            if (author) {
+                const arr = author.books || author.libros || [];
+                arr.sort((a, b) => {
+                    const titleA = a.title || a.titulo || '';
+                    const titleB = b.title || b.titulo || '';
+                    const yearA = parseInt(a.year || a.año) || 0;
+                    const yearB = parseInt(b.year || b.año) || 0;
+
+                    if (booksSort === 'title-asc') return titleA.localeCompare(titleB);
+                    if (booksSort === 'title-desc') return titleB.localeCompare(titleA);
+                    if (booksSort === 'year-asc') return yearA - yearB;
+                    if (booksSort === 'year-desc') return yearB - yearA;
+                });
+                saveLibraryData();
+            }
             renderApp();
         }
 
@@ -597,6 +660,8 @@
                 renderAuthorsView(container, emptyState);
             } else if (currentNavigation.view === 'books') {
                 renderBooksView(container, emptyState);
+            } else if (currentNavigation.view === 'favorites') {
+                renderFavoritesView(container, emptyState);
             }
         }
 
@@ -622,10 +687,16 @@
                         </span>
                     `;
                 }
+                const isGrid = displayMode.authors === 'grid';
                 actions.innerHTML = `
+                    <button onclick="toggleDisplayMode('authors')" title="Cambiar vista de lista/cuadros" 
+                        class="ios-btn p-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1 text-xs">
+                        <i class="fa-solid ${isGrid ? 'fa-list' : 'fa-grip'} text-neonRed text-sm"></i>
+                        <span class="hidden sm:inline">${isGrid ? 'Vista Lista' : 'Vista Cuadros'}</span>
+                    </button>
                     <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">
                         <i class="fa-solid fa-arrow-down-a-z text-xs text-slate-400"></i>
-                        <select onchange="authorsSort = this.value; renderApp();" class="bg-transparent text-xs text-slate-200 focus:outline-none cursor-pointer">
+                        <select onchange="handleSortAuthors(this.value)" class="bg-transparent text-xs text-slate-200 focus:outline-none cursor-pointer">
                             <option value="name-asc" ${authorsSort === 'name-asc' ? 'selected' : ''}>Nombre (A-Z)</option>
                             <option value="name-desc" ${authorsSort === 'name-desc' ? 'selected' : ''}>Nombre (Z-A)</option>
                             <option value="year-asc" ${authorsSort === 'year-asc' ? 'selected' : ''}>Año (Ascendente)</option>
@@ -651,10 +722,16 @@
                         <span class="font-bold text-white">${author.name || author.nombre}</span>
                     `;
                 }
+                const isGrid = displayMode.books === 'grid';
                 actions.innerHTML = `
+                    <button onclick="toggleDisplayMode('books')" title="Cambiar vista de lista/cuadros" 
+                        class="ios-btn p-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1 text-xs">
+                        <i class="fa-solid ${isGrid ? 'fa-list' : 'fa-grip'} text-neonRed text-sm"></i>
+                        <span class="hidden sm:inline">${isGrid ? 'Vista Lista' : 'Vista Cuadros'}</span>
+                    </button>
                     <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700">
                         <i class="fa-solid fa-sort text-xs text-slate-400"></i>
-                        <select onchange="booksSort = this.value; renderApp();" class="bg-transparent text-xs text-slate-200 focus:outline-none cursor-pointer">
+                        <select onchange="handleSortBooks(this.value)" class="bg-transparent text-xs text-slate-200 focus:outline-none cursor-pointer">
                             <option value="year-desc" ${booksSort === 'year-desc' ? 'selected' : ''}>Año (Más Reciente)</option>
                             <option value="year-asc" ${booksSort === 'year-asc' ? 'selected' : ''}>Año (Más Antiguo)</option>
                             <option value="title-asc" ${booksSort === 'title-asc' ? 'selected' : ''}>Título (A-Z)</option>
@@ -666,6 +743,14 @@
                         <span>Agregar Libro</span>
                     </button>
                 `;
+            } else if (currentNavigation.view === 'favorites') {
+                bcHtml += `
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
+                    <span class="font-bold text-amber-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-heart"></i> Todos mis Audiolibros Favoritos
+                    </span>
+                `;
+                actions.innerHTML = '';
             } else if (currentNavigation.view === 'search') {
                 bcHtml = `
                     <span class="text-slate-400 flex items-center gap-2">
@@ -755,96 +840,134 @@
             setupDragAndDrop(list, 'genre');
         }
 
-        // View 2: Authors
+        // View 2: Authors (Con Fotos Aún Más Grandes y Botón de Google Drive)
         function renderAuthorsView(container, emptyState) {
             const genre = libraryData.find(g => g.id === currentNavigation.genreId);
-            const authorsArr = genre ? (genre.authors || genre.autores || []) : [];
+            const authorsList = genre ? (genre.authors || genre.autores || []) : [];
 
-            if (!genre || authorsArr.length === 0) {
+            if (!genre || authorsList.length === 0) {
                 emptyState.classList.remove('hidden');
                 return;
             }
 
-            let authorsList = [...authorsArr];
-            authorsList.sort((a, b) => {
-                const nameA = a.name || a.nombre || '';
-                const nameB = b.name || b.nombre || '';
-                const yearA = parseInt(a.year || a.año) || 0;
-                const yearB = parseInt(b.year || b.año) || 0;
-
-                if (authorsSort === 'name-asc') return nameA.localeCompare(nameB);
-                if (authorsSort === 'name-desc') return nameB.localeCompare(nameA);
-                if (authorsSort === 'year-asc') return yearA - yearB;
-                if (authorsSort === 'year-desc') return yearB - yearA;
-            });
-
+            const isGrid = displayMode.authors === 'grid';
             const list = document.createElement('div');
-            list.className = 'flex flex-col gap-3';
             list.id = 'authorsList';
+            list.className = isGrid ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6' : 'flex flex-col gap-3';
 
             authorsList.forEach((author, index) => {
                 const books = author.books || author.libros || [];
                 const totalBooks = books.length;
                 const authorName = author.name || author.nombre || 'Sin Nombre';
                 const authorYear = author.year || author.año || '';
+                const authorDrive = author.driveUrl || author.drive || '';
                 const genreColor = genre.color || '#ff0055';
 
                 const item = document.createElement('div');
-                item.className = 'ios-glass-card p-4 md:p-5 flex items-center justify-between gap-4 cursor-pointer draggable-item';
+                item.className = 'ios-glass-card p-4 md:p-5 flex justify-between gap-4 cursor-pointer draggable-item ' + (isGrid ? 'flex-col items-center text-center' : 'items-center');
                 item.setAttribute('draggable', 'true');
                 item.dataset.index = index;
                 item.dataset.type = 'author';
                 item.style.setProperty('--genre-neon', genreColor);
                 item.style.setProperty('--genre-glow', `${genreColor}40`);
 
-                item.innerHTML = `
-                    <div class="flex items-center gap-4 flex-grow min-w-0" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
-                        <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-slate-300 p-1 drag-handle" onclick="event.stopPropagation()">
-                            <i class="fa-solid fa-grip-vertical text-lg"></i>
-                        </div>
-                        
-                        <div class="w-20 h-28 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border"
-                            style="border-color: ${genreColor}; box-shadow: 0 0 12px ${genreColor}30">
-                            ${author.photo ? 
-                                `<img src="${author.photo}" alt="${authorName}" class="w-full h-full object-cover">` : 
-                                `<i class="fa-solid fa-user text-3xl" style="color: ${genreColor}"></i>`}
-                        </div>
-
-                        <div class="truncate">
-                            <h3 class="text-lg font-bold text-white truncate flex items-center gap-2">
-                                ${authorName}
-                                ${authorYear ? `<span class="text-xs font-mono font-normal text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">(${authorYear})</span>` : ''}
-                            </h3>
-                            <p class="text-xs text-slate-400 line-clamp-2 mt-1 font-sans">${author.bio || 'Sin biografía disponible.'}</p>
-                            <div class="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
-                                <span class="px-2.5 py-0.5 rounded-full text-[11px]" style="background-color:${genreColor}20; color:${genreColor}; border: 1px solid ${genreColor}40">
-                                    <i class="fa-solid fa-book-bookmark mr-1"></i>${totalBooks} Audiolibros
+                if (isGrid) {
+                    item.innerHTML = `
+                        <div class="w-full flex items-center justify-between text-slate-500 mb-2">
+                            <div class="cursor-grab active:cursor-grabbing hover:text-slate-300 p-1 drag-handle" onclick="event.stopPropagation()">
+                                <i class="fa-solid fa-grip-vertical text-base"></i>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                ${authorDrive ? `
+                                    <a href="${authorDrive}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" title="Abrir Carpeta Google Drive" 
+                                        class="p-1 rounded-md bg-blue-500/20 text-blue-400 hover:text-white border border-blue-500/40 text-xs">
+                                        <i class="fa-brands fa-google-drive"></i>
+                                    </a>
+                                ` : ''}
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full" style="background:${genreColor}20; color:${genreColor}; border:1px solid ${genreColor}40">
+                                    ${authorYear ? authorYear : 'Autor'}
                                 </span>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="flex items-center gap-2 shrink-0">
-                        <button onclick="event.stopPropagation(); openAuthorDetailModal('${genre.id}', '${author.id}')" 
-                            title="Ver Perfil"
-                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
-                            <i class="fa-solid fa-eye text-cyan-400"></i>
-                        </button>
-                        <button onclick="event.stopPropagation(); openAuthorModal('${genre.id}', '${author.id}')" 
-                            title="Editar Autor"
-                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
-                            <i class="fa-solid fa-pen-to-square text-amber-400"></i>
-                        </button>
-                        <button onclick="event.stopPropagation(); deleteAuthor('${genre.id}', '${author.id}')" 
-                            title="Eliminar Autor"
-                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/60 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
-                            <i class="fa-solid fa-trash-can text-rose-500"></i>
-                        </button>
-                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        <!-- FOTO AÚN MÁS GRANDE (w-44 h-60 / 176px x 240px) -->
+                        <div class="w-44 h-60 rounded-2xl overflow-hidden bg-slate-950 border-2 shadow-2xl relative mb-3 group"
+                            style="border-color: ${genreColor}; box-shadow: 0 0 22px ${genreColor}40"
+                            onclick="navigateTo('books', '${genre.id}', '${author.id}')">
+                            ${author.photo ? 
+                                `<img src="${author.photo}" alt="${authorName}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">` : 
+                                `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-user text-6xl" style="color: ${genreColor}"></i></div>`}
                         </div>
-                    </div>
-                `;
+                        <h3 class="text-lg font-extrabold text-white truncate w-full" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
+                            ${authorName}
+                        </h3>
+                        <p class="text-xs text-slate-400 line-clamp-2 mt-1 font-sans px-2">${author.bio || 'Sin biografía disponible.'}</p>
+                        <div class="mt-3 w-full flex items-center justify-center gap-2">
+                            <span class="text-xs font-mono font-bold text-slate-300 bg-slate-900/80 px-3 py-1 rounded-xl border border-slate-800">
+                                <i class="fa-solid fa-book-bookmark mr-1.5" style="color:${genreColor}"></i>${totalBooks} Libros
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800/80 w-full justify-center">
+                            <button onclick="event.stopPropagation(); openAuthorDetailModal('${genre.id}', '${author.id}')" title="Ver Perfil" class="ios-btn p-2 rounded-xl bg-slate-800 text-slate-300"><i class="fa-solid fa-eye text-cyan-400"></i></button>
+                            <button onclick="event.stopPropagation(); openAuthorModal('${genre.id}', '${author.id}')" title="Editar Autor" class="ios-btn p-2 rounded-xl bg-slate-800 text-slate-300"><i class="fa-solid fa-pen-to-square text-amber-400"></i></button>
+                            <button onclick="event.stopPropagation(); deleteAuthor('${genre.id}', '${author.id}')" title="Eliminar Autor" class="ios-btn p-2 rounded-xl bg-slate-800 text-slate-300"><i class="fa-solid fa-trash-can text-rose-500"></i></button>
+                        </div>
+                    `;
+                } else {
+                    item.innerHTML = `
+                        <div class="flex items-center gap-4 flex-grow min-w-0" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
+                            <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-slate-300 p-1 drag-handle" onclick="event.stopPropagation()">
+                                <i class="fa-solid fa-grip-vertical text-lg"></i>
+                            </div>
+                            
+                            <div class="w-20 h-28 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border"
+                                style="border-color: ${genreColor}; box-shadow: 0 0 12px ${genreColor}30">
+                                ${author.photo ? 
+                                    `<img src="${author.photo}" alt="${authorName}" class="w-full h-full object-cover">` : 
+                                    `<i class="fa-solid fa-user text-3xl" style="color: ${genreColor}"></i>`}
+                            </div>
+
+                            <div class="truncate">
+                                <h3 class="text-lg font-bold text-white truncate flex items-center gap-2">
+                                    ${authorName}
+                                    ${authorYear ? `<span class="text-xs font-mono font-normal text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">(${authorYear})</span>` : ''}
+                                    ${authorDrive ? `
+                                        <a href="${authorDrive}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" title="Abrir Google Drive del Autor" 
+                                            class="text-blue-400 hover:text-blue-300 text-sm ml-1">
+                                            <i class="fa-brands fa-google-drive"></i>
+                                        </a>
+                                    ` : ''}
+                                </h3>
+                                <p class="text-xs text-slate-400 line-clamp-2 mt-1 font-sans">${author.bio || 'Sin biografía disponible.'}</p>
+                                <div class="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px]" style="background-color:${genreColor}20; color:${genreColor}; border: 1px solid ${genreColor}40">
+                                        <i class="fa-solid fa-book-bookmark mr-1"></i>${totalBooks} Audiolibros
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="event.stopPropagation(); openAuthorDetailModal('${genre.id}', '${author.id}')" 
+                                title="Ver Perfil"
+                                class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
+                                <i class="fa-solid fa-eye text-cyan-400"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); openAuthorModal('${genre.id}', '${author.id}')" 
+                                title="Editar Autor"
+                                class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
+                                <i class="fa-solid fa-pen-to-square text-amber-400"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); deleteAuthor('${genre.id}', '${author.id}')" 
+                                title="Eliminar Autor"
+                                class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/60 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
+                                <i class="fa-solid fa-trash-can text-rose-500"></i>
+                            </button>
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </div>
+                        </div>
+                    `;
+                }
                 list.appendChild(item);
             });
 
@@ -852,119 +975,192 @@
             setupDragAndDrop(list, 'author');
         }
 
-        // View 3: Books
+        // View 3: Books (Fotos de Portadas Aún Más Grandes y Botón de Google Drive junto al Género)
         function renderBooksView(container, emptyState) {
             const genre = libraryData.find(g => g.id === currentNavigation.genreId);
             const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === currentNavigation.authorId) : null;
-            const booksArr = author ? (author.books || author.libros || []) : [];
+            const booksList = author ? (author.books || author.libros || []) : [];
 
-            if (!genre || !author || booksArr.length === 0) {
+            if (!genre || !author) {
                 emptyState.classList.remove('hidden');
                 return;
             }
 
-            let sortedBooks = [...booksArr];
-            sortedBooks.sort((a, b) => {
-                const titleA = a.title || a.titulo || '';
-                const titleB = b.title || b.titulo || '';
-                const yearA = parseInt(a.year || a.año) || 0;
-                const yearB = parseInt(b.year || b.año) || 0;
+            const genreColor = genre.color || '#ff0055';
+            const authorName = author.name || author.nombre || 'Autor';
+            const authorDrive = author.driveUrl || author.drive || '';
 
-                if (booksSort === 'title-asc') return titleA.localeCompare(titleB);
-                if (booksSort === 'title-desc') return titleB.localeCompare(titleA);
-                if (booksSort === 'year-asc') return yearA - yearB;
-                if (booksSort === 'year-desc') return yearB - yearA;
-            });
+            // Cabecera destacada del Autor con Avatar Más Grande, Biografía y Enlace Directo a Google Drive al lado del Género
+            const authorHeader = document.createElement('div');
+            authorHeader.className = 'ios-glass p-6 rounded-3xl border border-slate-700/80 mb-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden shadow-2xl';
+            authorHeader.style.borderColor = `${genreColor}60`;
+            authorHeader.innerHTML = `
+                <!-- FOTO AUTOR EN CABECERA AÚN MÁS GRANDE (w-44 h-60 / 176px x 240px) -->
+                <div class="w-44 h-60 rounded-2xl overflow-hidden bg-slate-950 shrink-0 border-2 shadow-[0_0_25px_rgba(0,0,0,0.8)] relative group"
+                    style="border-color: ${genreColor}; box-shadow: 0 0 25px ${genreColor}50">
+                    ${author.photo ? 
+                        `<img src="${author.photo}" alt="${authorName}" class="w-full h-full object-cover">` : 
+                        `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-user text-6xl" style="color: ${genreColor}"></i></div>`}
+                </div>
+                <div class="flex-grow text-center md:text-left">
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-2.5 mb-2">
+                        <span class="neon-badge px-3 py-1 rounded-full text-xs font-mono font-bold" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
+                            ${genre.name || genre.nombre}
+                        </span>
+                        ${authorDrive ? `
+                            <a href="${authorDrive}" target="_blank" rel="noopener noreferrer" title="Abrir Carpeta Google Drive" 
+                                class="ios-btn px-3 py-1 rounded-full text-xs font-mono font-bold bg-blue-600/20 border border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white flex items-center gap-1.5 shadow-[0_0_12px_rgba(59,130,246,0.3)]">
+                                <i class="fa-brands fa-google-drive text-sm"></i>
+                                <span>Google Drive</span>
+                            </a>
+                        ` : ''}
+                        ${author.year ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700">Año: ${author.year}</span>` : ''}
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">${authorName}</h2>
+                    <p class="text-sm text-slate-300 mt-3 leading-relaxed font-sans max-w-3xl">${author.bio || 'Sin biografía disponible para este autor.'}</p>
+                    <div class="mt-4 flex items-center justify-center md:justify-start gap-4 text-xs font-mono text-slate-400">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-book-bookmark" style="color:${genreColor}"></i> ${booksList.length} Audiolibros en total</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(authorHeader);
 
+            if (booksList.length === 0) {
+                const emptyBooks = document.createElement('div');
+                emptyBooks.className = 'text-center py-12 ios-glass rounded-3xl border border-dashed border-slate-800';
+                emptyBooks.innerHTML = `
+                    <i class="fa-solid fa-book text-4xl text-slate-700 mb-2"></i>
+                    <p class="text-slate-400 text-sm">Este autor aún no posee audiolibros agregados.</p>
+                `;
+                container.appendChild(emptyBooks);
+                return;
+            }
+
+            const isGrid = displayMode.books === 'grid';
             const list = document.createElement('div');
-            list.className = 'flex flex-col gap-3';
             list.id = 'booksList';
+            list.className = isGrid ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6' : 'flex flex-col gap-3';
 
-            sortedBooks.forEach((book, index) => {
+            booksList.forEach((book, index) => {
                 const bookTitle = book.title || book.titulo || 'Sin título';
                 const bookYear = book.year || book.año || '';
-                const genreColor = genre.color || '#ff0055';
-                const authorName = author.name || author.nombre || '';
 
                 const item = document.createElement('div');
-                item.className = 'ios-glass-card p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 draggable-item';
+                item.className = 'ios-glass-card p-4 md:p-5 flex justify-between gap-4 draggable-item ' + (isGrid ? 'flex-col items-center text-center' : 'flex-col sm:flex-row items-start sm:items-center');
                 item.setAttribute('draggable', 'true');
                 item.dataset.index = index;
                 item.dataset.type = 'book';
                 item.style.setProperty('--genre-neon', genreColor);
                 item.style.setProperty('--genre-glow', `${genreColor}40`);
 
-                item.innerHTML = `
-                    <div class="flex items-start sm:items-center gap-4 flex-grow min-w-0 w-full">
-                        <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-slate-300 p-1 drag-handle self-center">
-                            <i class="fa-solid fa-grip-vertical text-lg"></i>
+                if (isGrid) {
+                    item.innerHTML = `
+                        <div class="w-full flex items-center justify-between text-slate-500 mb-1">
+                            <div class="cursor-grab active:cursor-grabbing hover:text-slate-300 p-1 drag-handle" onclick="event.stopPropagation()">
+                                <i class="fa-solid fa-grip-vertical text-base"></i>
+                            </div>
+                            <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800">${bookYear || 'N/D'}</span>
                         </div>
-
-                        <div class="w-24 h-36 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border shadow-xl relative group"
-                            style="border-color: ${genreColor}; box-shadow: 0 0 15px ${genreColor}25">
+                        <!-- PORTADA DE AUDIOLIBRO AÚN MÁS GRANDE (w-44 h-64 / 176px x 256px) -->
+                        <div class="w-44 h-64 rounded-2xl overflow-hidden bg-slate-950 border shadow-2xl relative my-2 group"
+                            style="border-color: ${genreColor}; box-shadow: 0 0 20px ${genreColor}35">
                             ${book.cover ? 
-                                `<img src="${book.cover}" alt="${bookTitle}" class="w-full h-full object-cover">` : 
-                                `<i class="fa-solid fa-book-open text-3xl text-slate-700"></i>`}
+                                `<img src="${book.cover}" alt="${bookTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">` : 
+                                `<div class="w-full h-full flex items-center justify-center text-slate-700"><i class="fa-solid fa-book-open text-5xl"></i></div>`}
                         </div>
-
-                        <div class="flex-grow min-w-0">
-                            <div class="flex items-center gap-2 flex-wrap mb-1">
-                                <span class="neon-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
-                                    ${genre.name || genre.nombre}
-                                </span>
-                                ${bookYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md"><i class="fa-solid fa-calendar-day mr-1"></i>${bookYear}</span>` : ''}
-                                <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${book.status || 'Pendiente'}</span>
-                                
-                                ${book.isFisico ? `<span class="text-[10px] font-bold font-mono bg-amber-500/10 border border-amber-500 text-amber-400 px-2 py-0.5 rounded-md flex items-center gap-1"><i class="fa-solid fa-book"></i> Físico</span>` : ''}
-                                ${book.isAudio ? `<span class="text-[10px] font-bold font-mono bg-cyan-500/10 border border-cyan-500 text-cyan-400 px-2 py-0.5 rounded-md flex items-center gap-1"><i class="fa-solid fa-headphones"></i> Audiolibro</span>` : ''}
-                            </div>
-
-                            <h3 class="text-base sm:text-lg font-bold text-white break-words leading-snug">
-                                ${bookTitle}
-                            </h3>
-                            <p class="text-xs text-slate-400 font-medium mt-1">
-                                <i class="fa-solid fa-user-pen mr-1" style="color: ${genreColor}"></i> ${authorName}
-                            </p>
-
-                            <div class="mt-3 max-w-md">
-                                <div class="flex justify-between text-[11px] font-mono text-slate-400 mb-1">
-                                    <span>${book.duration || 'Duración N/D'}</span>
-                                    <span style="color: ${genreColor}">${book.progress || 0}%</span>
-                                </div>
-                                <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                                    <div class="h-full rounded-full transition-all duration-500" 
-                                        style="width: ${book.progress || 0}%; background-color: ${genreColor}; box-shadow: 0 0 10px ${genreColor}"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                        ${book.audioUrl ? `
-                            <a href="${book.audioUrl}" target="_blank" rel="noopener noreferrer" title="Escuchar Audiolibro en Pestaña Nueva"
-                                class="ios-btn px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(0,243,255,0.3)]">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                <span>Escuchar</span>
-                            </a>
-                        ` : ''}
+                        <h3 class="text-base font-bold text-white break-words line-clamp-2 w-full">${bookTitle}</h3>
+                        <p class="text-xs text-slate-400 font-medium mt-1"><i class="fa-solid fa-user-pen mr-1" style="color:${genreColor}"></i>${authorName}</p>
                         
-                        <button onclick="toggleFavorite('${genre.id}', '${author.id}', '${book.id}')" 
-                            title="Favorito"
-                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
-                            <i class="${book.favorite ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart text-slate-500'} text-base"></i>
-                        </button>
-                        <button onclick="openBookModal('${genre.id}', '${author.id}', '${book.id}')" 
-                            title="Editar Audiolibro"
-                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
-                            <i class="fa-solid fa-pen-to-square text-amber-400 text-base"></i>
-                        </button>
-                        <button onclick="deleteBook('${genre.id}', '${author.id}', '${book.id}')" 
-                            title="Eliminar Audiolibro"
-                            class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/60 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
-                            <i class="fa-solid fa-trash-can text-rose-500 text-base"></i>
-                        </button>
-                    </div>
-                `;
+                        <div class="w-full mt-3">
+                            <div class="flex justify-between text-[10px] font-mono text-slate-400 mb-1">
+                                <span>${book.duration || 'N/D'}</span>
+                                <span style="color:${genreColor}">${book.progress || 0}%</span>
+                            </div>
+                            <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                <div class="h-full rounded-full" style="width:${book.progress || 0}%; background-color:${genreColor}"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800/80 w-full justify-center">
+                            ${book.audioUrl ? `<a href="${book.audioUrl}" target="_blank" class="ios-btn p-2 rounded-xl bg-cyan-500/20 text-cyan-300"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                            <button onclick="toggleFavorite('${genre.id}', '${author.id}', '${book.id}')" class="ios-btn p-2 rounded-xl bg-slate-800 text-slate-300"><i class="${book.favorite ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart text-slate-500'}"></i></button>
+                            <button onclick="openBookModal('${genre.id}', '${author.id}', '${book.id}')" class="ios-btn p-2 rounded-xl bg-slate-800 text-amber-400"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteBook('${genre.id}', '${author.id}', '${book.id}')" class="ios-btn p-2 rounded-xl bg-slate-800 text-rose-500"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    `;
+                } else {
+                    item.innerHTML = `
+                        <div class="flex items-start sm:items-center gap-4 flex-grow min-w-0 w-full">
+                            <div class="cursor-grab active:cursor-grabbing text-slate-600 hover:text-slate-300 p-1 drag-handle self-center">
+                                <i class="fa-solid fa-grip-vertical text-lg"></i>
+                            </div>
+
+                            <div class="w-24 h-36 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border shadow-xl relative group"
+                                style="border-color: ${genreColor}; box-shadow: 0 0 15px ${genreColor}25">
+                                ${book.cover ? 
+                                    `<img src="${book.cover}" alt="${bookTitle}" class="w-full h-full object-cover">` : 
+                                    `<i class="fa-solid fa-book-open text-3xl text-slate-700"></i>`}
+                            </div>
+
+                            <div class="flex-grow min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap mb-1">
+                                    <span class="neon-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
+                                        ${genre.name || genre.nombre}
+                                    </span>
+                                    ${bookYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md"><i class="fa-solid fa-calendar-day mr-1"></i>${bookYear}</span>` : ''}
+                                    <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${book.status || 'Pendiente'}</span>
+                                    
+                                    ${book.isFisico ? `<span class="text-[10px] font-bold font-mono bg-amber-500/10 border border-amber-500 text-amber-400 px-2 py-0.5 rounded-md flex items-center gap-1"><i class="fa-solid fa-book"></i> Físico</span>` : ''}
+                                    ${book.isAudio ? `<span class="text-[10px] font-bold font-mono bg-cyan-500/10 border border-cyan-500 text-cyan-400 px-2 py-0.5 rounded-md flex items-center gap-1"><i class="fa-solid fa-headphones"></i> Audiolibro</span>` : ''}
+                                </div>
+
+                                <h3 class="text-base sm:text-lg font-bold text-white break-words leading-snug">
+                                    ${bookTitle}
+                                </h3>
+                                <p class="text-xs text-slate-400 font-medium mt-1">
+                                    <i class="fa-solid fa-user-pen mr-1" style="color: ${genreColor}"></i> ${authorName}
+                                </p>
+
+                                <div class="mt-3 max-w-md">
+                                    <div class="flex justify-between text-[11px] font-mono text-slate-400 mb-1">
+                                        <span>${book.duration || 'Duración N/D'}</span>
+                                        <span style="color: ${genreColor}">${book.progress || 0}%</span>
+                                    </div>
+                                    <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                                        <div class="h-full rounded-full transition-all duration-500" 
+                                            style="width: ${book.progress || 0}%; background-color: ${genreColor}; box-shadow: 0 0 10px ${genreColor}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                            ${book.audioUrl ? `
+                                <a href="${book.audioUrl}" target="_blank" rel="noopener noreferrer" title="Escuchar Audiolibro en Pestaña Nueva"
+                                    class="ios-btn px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(0,243,255,0.3)]">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    <span>Escuchar</span>
+                                </a>
+                            ` : ''}
+                            
+                            <button onclick="toggleFavorite('${genre.id}', '${author.id}', '${book.id}')" 
+                                title="Favorito"
+                                class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
+                                <i class="${book.favorite ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart text-slate-500'} text-base"></i>
+                            </button>
+                            <button onclick="openBookModal('${genre.id}', '${author.id}', '${book.id}')" 
+                                title="Editar Audiolibro"
+                                class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
+                                <i class="fa-solid fa-pen-to-square text-amber-400 text-base"></i>
+                            </button>
+                            <button onclick="deleteBook('${genre.id}', '${author.id}', '${book.id}')" 
+                                title="Eliminar Audiolibro"
+                                class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/60 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
+                                <i class="fa-solid fa-trash-can text-rose-500 text-base"></i>
+                            </button>
+                        </div>
+                    `;
+                }
                 list.appendChild(item);
             });
 
@@ -972,9 +1168,10 @@
             setupDragAndDrop(list, 'book');
         }
 
-        // View 4: Buscador Corregido (Soporta Autores con o sin Libros)
+        // View 4: Buscador Optimizado (Primer lugar: Carpeta de Autor)
         function renderSearchResults(container, emptyState) {
-            let matches = [];
+            let authorMatches = [];
+            let bookMatches = [];
 
             libraryData.forEach(genre => {
                 const genreName = cleanString(genre.name || genre.nombre);
@@ -985,42 +1182,29 @@
                 authors.forEach(author => {
                     const authorName = cleanString(author.name || author.nombre);
                     const authorYear = cleanString(author.year || author.año);
-
                     const matchAuthorName = authorName.includes(searchQuery);
                     const matchAuthorYear = authorYear.includes(searchQuery);
 
-                    const books = author.books || author.libros || [];
-
-                    // Si el autor coincide o el género coincide y el autor NO tiene libros, mostramos tarjeta de autor
-                    if ((matchAuthorName || matchAuthorYear || matchGenre) && books.length === 0) {
-                        matches.push({
-                            type: 'author',
-                            genre,
-                            author
-                        });
+                    // Si coincide el nombre o año del autor, guardamos la carpeta del Autor de primero
+                    if (matchAuthorName || matchAuthorYear) {
+                        authorMatches.push({ genre, author });
                     }
 
-                    // Iteramos libros
+                    const books = author.books || author.libros || [];
                     books.forEach(book => {
                         const bookTitle = cleanString(book.title || book.titulo);
                         const bookYear = cleanString(book.year || book.año);
-
                         const matchBookTitle = bookTitle.includes(searchQuery);
                         const matchBookYear = bookYear.includes(searchQuery);
 
                         if (matchGenre || matchAuthorName || matchAuthorYear || matchBookTitle || matchBookYear) {
-                            matches.push({
-                                type: 'book',
-                                genre,
-                                author,
-                                book
-                            });
+                            bookMatches.push({ genre, author, book });
                         }
                     });
                 });
             });
 
-            if (matches.length === 0) {
+            if (authorMatches.length === 0 && bookMatches.length === 0) {
                 emptyState.classList.remove('hidden');
                 return;
             }
@@ -1028,91 +1212,160 @@
             const list = document.createElement('div');
             list.className = 'flex flex-col gap-3';
 
-            matches.forEach(itemData => {
+            // 1. Mostrar Autor primero si hubo coincidencia
+            authorMatches.forEach(({ genre, author }) => {
+                const authorName = author.name || author.nombre || 'Autor';
+                const authorYear = author.year || author.año || '';
+                const genreColor = genre.color || '#ff0055';
+                const booksCount = (author.books || author.libros || []).length;
+
+                const authorCard = document.createElement('div');
+                authorCard.className = 'ios-glass-card p-4 md:p-5 flex items-center justify-between gap-4 border-2 shadow-2xl';
+                authorCard.style.borderColor = genreColor;
+                authorCard.style.setProperty('--genre-neon', genreColor);
+                authorCard.style.setProperty('--genre-glow', `${genreColor}50`);
+
+                authorCard.innerHTML = `
+                    <div class="flex items-center gap-4 flex-grow min-w-0 cursor-pointer" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
+                        <div class="w-16 h-20 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border"
+                            style="border-color: ${genreColor}">
+                            ${author.photo ? `<img src="${author.photo}" alt="${authorName}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user text-2xl text-slate-600"></i>`}
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="neon-badge px-2 py-0.5 rounded-full text-[10px] font-mono font-bold">
+                                    <i class="fa-solid fa-folder mr-1"></i> Carpeta de Autor
+                                </span>
+                                ${authorYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">(${authorYear})</span>` : ''}
+                            </div>
+                            <h3 class="text-lg font-extrabold text-white truncate">${authorName}</h3>
+                            <p class="text-xs text-slate-400 line-clamp-1 mt-0.5 font-sans">${author.bio || 'Sin biografía disponible.'}</p>
+                        </div>
+                    </div>
+                    <button onclick="navigateTo('books', '${genre.id}', '${author.id}')" 
+                        class="ios-btn px-4 py-2 rounded-xl bg-neonRed text-white text-xs font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(255,0,85,0.4)] shrink-0">
+                        <span>Abrir Carpeta</span>
+                        <i class="fa-solid fa-folder-open"></i>
+                    </button>
+                `;
+                list.appendChild(authorCard);
+            });
+
+            // 2. Mostrar Audiolibros coincidentes
+            bookMatches.forEach(({ genre, author, book }) => {
+                const bookTitle = book.title || book.titulo || 'Sin Título';
+                const bookYear = book.year || book.año || '';
+                const authorName = author.name || author.nombre || 'Autor Desconocido';
+                const genreName = genre.name || genre.nombre || 'Género';
+                const genreColor = genre.color || '#ff0055';
+
+                const bookCard = document.createElement('div');
+                bookCard.className = 'ios-glass-card p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+                bookCard.style.setProperty('--genre-neon', genreColor);
+                bookCard.style.setProperty('--genre-glow', `${genreColor}40`);
+
+                bookCard.innerHTML = `
+                    <div class="flex items-center gap-4 flex-grow min-w-0">
+                        <div class="w-16 h-24 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border"
+                            style="border-color: ${genreColor}">
+                            ${book.cover ? `<img src="${book.cover}" alt="${bookTitle}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-book-open text-2xl text-slate-700"></i>`}
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="neon-badge px-2 py-0.5 rounded-full text-[10px] font-mono font-bold" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
+                                    ${genreName}
+                                </span>
+                                ${bookYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${bookYear}</span>` : ''}
+                            </div>
+                            <h3 class="text-base font-bold text-white break-words">${bookTitle}</h3>
+                            <p class="text-xs text-slate-400 mt-0.5 font-medium"><i class="fa-solid fa-user-pen mr-1" style="color:${genreColor}"></i> ${authorName}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        ${book.audioUrl ? `
+                            <a href="${book.audioUrl}" target="_blank" class="ios-btn px-3 py-1.5 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Escuchar
+                            </a>
+                        ` : ''}
+                        <button onclick="navigateTo('books', '${genre.id}', '${author.id}')" class="ios-btn px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-semibold text-white hover:bg-slate-700">
+                            Ir al Autor <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(bookCard);
+            });
+
+            container.appendChild(list);
+        }
+
+        // View 5: Vista de Todos los Favoritos
+        function renderFavoritesView(container, emptyState) {
+            let favsList = [];
+
+            libraryData.forEach(genre => {
+                const authors = genre.authors || genre.autores || [];
+                authors.forEach(author => {
+                    const books = author.books || author.libros || [];
+                    books.forEach(book => {
+                        if (book.favorite) {
+                            favsList.push({ genre, author, book });
+                        }
+                    });
+                });
+            });
+
+            if (favsList.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.querySelector('h3').innerText = 'Aún no tienes audiolibros favoritos';
+                emptyState.querySelector('p').innerText = 'Marca con el icono de corazón tus audiolibros preferidos para verlos agrupados aquí.';
+                return;
+            }
+
+            const list = document.createElement('div');
+            list.className = 'flex flex-col gap-3';
+
+            favsList.forEach(({ genre, author, book }) => {
+                const bookTitle = book.title || book.titulo || 'Sin Título';
+                const bookYear = book.year || book.año || '';
+                const authorName = author.name || author.nombre || 'Autor Desconocido';
+                const genreName = genre.name || genre.nombre || 'Género';
+                const genreColor = genre.color || '#ff0055';
+
                 const item = document.createElement('div');
-                item.className = 'ios-glass-card p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
+                item.className = 'ios-glass-card p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-l-4 border-amber-400';
 
-                if (itemData.type === 'book') {
-                    const { book, author, genre } = itemData;
-                    const bookTitle = book.title || book.titulo || 'Sin Título';
-                    const bookYear = book.year || book.año || '';
-                    const authorName = author.name || author.nombre || 'Autor Desconocido';
-                    const authorYear = author.year || author.año || '';
-                    const genreName = genre.name || genre.nombre || 'Género';
-                    const genreColor = genre.color || '#ff0055';
-
-                    item.style.setProperty('--genre-neon', genreColor);
-                    item.style.setProperty('--genre-glow', `${genreColor}40`);
-
-                    item.innerHTML = `
-                        <div class="flex items-center gap-4 flex-grow min-w-0">
-                            <div class="w-20 h-28 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border"
-                                style="border-color: ${genreColor}; box-shadow: 0 0 10px ${genreColor}30">
-                                ${book.cover ? 
-                                    `<img src="${book.cover}" alt="${bookTitle}" class="w-full h-full object-cover">` : 
-                                    `<i class="fa-solid fa-book-open text-2xl text-slate-700"></i>`}
-                            </div>
-                            <div class="min-w-0">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="neon-badge px-2 py-0.5 rounded-full text-[10px] font-mono font-bold" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
-                                        ${genreName}
-                                    </span>
-                                    ${bookYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${bookYear}</span>` : ''}
-                                </div>
-                                <h3 class="text-base font-bold text-white break-words">${bookTitle}</h3>
-                                <p class="text-xs text-slate-400 mt-0.5 font-medium">${authorName} ${authorYear ? `(${authorYear})` : ''}</p>
-                            </div>
+                item.innerHTML = `
+                    <div class="flex items-center gap-4 flex-grow min-w-0">
+                        <div class="w-20 h-28 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border shadow-xl"
+                            style="border-color: ${genreColor}; box-shadow: 0 0 10px ${genreColor}30">
+                            ${book.cover ? `<img src="${book.cover}" alt="${bookTitle}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-book-open text-2xl text-slate-700"></i>`}
                         </div>
-                        <div class="flex items-center gap-2">
-                            ${book.audioUrl ? `
-                                <a href="${book.audioUrl}" target="_blank" rel="noopener noreferrer"
-                                    class="ios-btn px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center gap-1">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Escuchar
-                                </a>
-                            ` : ''}
-                            <button onclick="navigateTo('books', '${genre.id}', '${author.id}')" class="ios-btn px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-semibold text-white hover:bg-slate-700">
-                                Ir al Libro <i class="fa-solid fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
-                    `;
-                } else {
-                    // Muestra tarjeta de Autor si aún no tiene libros registrados
-                    const { author, genre } = itemData;
-                    const authorName = author.name || author.nombre || 'Autor';
-                    const authorYear = author.year || author.año || '';
-                    const genreName = genre.name || genre.nombre || 'Género';
-                    const genreColor = genre.color || '#ff0055';
-
-                    item.style.setProperty('--genre-neon', genreColor);
-                    item.style.setProperty('--genre-glow', `${genreColor}40`);
-
-                    item.innerHTML = `
-                        <div class="flex items-center gap-4 flex-grow min-w-0">
-                            <div class="w-20 h-28 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border"
-                                style="border-color: ${genreColor}; box-shadow: 0 0 10px ${genreColor}30">
-                                ${author.photo ? 
-                                    `<img src="${author.photo}" alt="${authorName}" class="w-full h-full object-cover">` : 
-                                    `<i class="fa-solid fa-user text-3xl" style="color: ${genreColor}"></i>`}
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="neon-badge px-2 py-0.5 rounded-full text-[10px] font-mono font-bold" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
+                                    ${genreName}
+                                </span>
+                                ${bookYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${bookYear}</span>` : ''}
                             </div>
-                            <div class="min-w-0">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="neon-badge px-2 py-0.5 rounded-full text-[10px] font-mono font-bold" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
-                                        ${genreName} (Autor)
-                                    </span>
-                                    ${authorYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${authorYear}</span>` : ''}
-                                </div>
-                                <h3 class="text-base font-bold text-white break-words">${authorName}</h3>
-                                <p class="text-xs text-slate-400 mt-0.5 font-medium line-clamp-1">${author.bio || 'Sin biografía registrada.'}</p>
-                            </div>
+                            <h3 class="text-base sm:text-lg font-bold text-white break-words">${bookTitle}</h3>
+                            <p class="text-xs text-slate-400 mt-1 font-medium"><i class="fa-solid fa-user-pen mr-1" style="color:${genreColor}"></i> ${authorName}</p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button onclick="navigateTo('books', '${genre.id}', '${author.id}')" class="ios-btn px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-semibold text-white hover:bg-slate-700">
-                                Ver Autor <i class="fa-solid fa-arrow-right ml-1"></i>
-                            </button>
-                        </div>
-                    `;
-                }
-
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        ${book.audioUrl ? `
+                            <a href="${book.audioUrl}" target="_blank" rel="noopener noreferrer" 
+                                class="ios-btn px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Escuchar
+                            </a>
+                        ` : ''}
+                        <button onclick="toggleFavorite('${genre.id}', '${author.id}', '${book.id}')" title="Quitar de Favoritos" class="ios-btn p-2.5 rounded-xl bg-slate-800 text-rose-500 hover:bg-rose-950/40 border border-rose-900">
+                            <i class="fa-solid fa-heart text-base"></i>
+                        </button>
+                        <button onclick="navigateTo('books', '${genre.id}', '${author.id}')" class="ios-btn px-3 py-2 rounded-xl bg-slate-800 text-xs font-semibold text-white hover:bg-slate-700">
+                            Ver Autor <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                `;
                 list.appendChild(item);
             });
 
@@ -1247,6 +1500,7 @@
             const nameInput = document.getElementById('authorNameInput');
             const yearInput = document.getElementById('authorYearInput');
             const photoInput = document.getElementById('authorPhotoInput');
+            const driveInput = document.getElementById('authorDriveInput');
             const bioInput = document.getElementById('authorBioInput');
             const genreIdHidden = document.getElementById('authorGenreId');
             const editId = document.getElementById('authorEditId');
@@ -1261,6 +1515,7 @@
                     nameInput.value = author.name || author.nombre || '';
                     yearInput.value = author.year || author.año || '';
                     photoInput.value = author.photo || '';
+                    driveInput.value = author.driveUrl || author.drive || '';
                     bioInput.value = author.bio || '';
                     editId.value = author.id;
                 }
@@ -1269,6 +1524,7 @@
                 nameInput.value = '';
                 yearInput.value = '';
                 photoInput.value = '';
+                driveInput.value = '';
                 bioInput.value = '';
                 editId.value = '';
             }
@@ -1283,6 +1539,7 @@
             const name = document.getElementById('authorNameInput').value.trim();
             const year = document.getElementById('authorYearInput').value;
             const photo = document.getElementById('authorPhotoInput').value.trim();
+            const driveUrl = document.getElementById('authorDriveInput').value.trim();
             const bio = document.getElementById('authorBioInput').value.trim();
 
             const genre = libraryData.find(g => g.id === genreId);
@@ -1297,6 +1554,7 @@
                     author.name = name;
                     author.year = year;
                     author.photo = photo;
+                    author.driveUrl = driveUrl;
                     author.bio = bio;
                 }
             } else {
@@ -1305,6 +1563,7 @@
                     name: name,
                     year: year,
                     photo: photo,
+                    driveUrl: driveUrl,
                     bio: bio,
                     books: []
                 };
@@ -1473,18 +1732,26 @@
             const books = author.books || author.libros || [];
             const authorName = author.name || author.nombre || 'Autor';
             const authorYear = author.year || author.año || '';
+            const authorDrive = author.driveUrl || author.drive || '';
             const genreColor = genre.color || '#ff0055';
             const genreName = genre.name || genre.nombre || '';
 
             const content = document.getElementById('authorDetailContent');
             content.innerHTML = `
                 <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-                    <div class="w-24 h-36 rounded-2xl overflow-hidden bg-slate-950 shrink-0 border border-slate-700 shadow-2xl"
+                    <div class="w-32 h-44 rounded-2xl overflow-hidden bg-slate-950 shrink-0 border border-slate-700 shadow-2xl"
                         style="border-color: ${genreColor}; box-shadow: 0 0 15px ${genreColor}40">
                         ${author.photo ? `<img src="${author.photo}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-user text-4xl" style="color:${genreColor}"></i></div>`}
                     </div>
                     <div>
-                        <span class="neon-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase" style="--genre-neon:${genreColor}; --genre-glow:${genreColor}40">${genreName}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="neon-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase" style="--genre-neon:${genreColor}; --genre-glow:${genreColor}40">${genreName}</span>
+                            ${authorDrive ? `
+                                <a href="${authorDrive}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-white text-sm" title="Abrir Carpeta Google Drive">
+                                    <i class="fa-brands fa-google-drive"></i>
+                                </a>
+                            ` : ''}
+                        </div>
                         <h2 class="text-2xl font-extrabold text-white mt-1">${authorName} ${authorYear ? `(${authorYear})` : ''}</h2>
                         <p class="text-slate-300 text-sm mt-3 leading-relaxed">${author.bio || 'Sin biografía registrada.'}</p>
                     </div>

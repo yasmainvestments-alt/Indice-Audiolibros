@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YasmaStark Audiobook Library</title>
     <!-- Favicon para la pestaña del navegador -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%2307070a'/><path d='M256 96c-79.5 0-144 64.5-144 144v112c0 26.5 21.5 48 48 48h16c17.7 0 32-14.3 32-32V288c0-17.7-14.3-32-32-32h-32v-16c0-61.9 50.1-112 112-112s112 50.1 112 112v16h-32c-17.7 0-32 14.3-32 32v80c0 17.7 14.3 32 32 32h16c26.5 0 48-21.5 48-48V240c0-79.5-64.5-144-144-144z' fill='%23ff0055'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%2307070a'/><path d='M256 96c-79.5 0-144 64.5-144 144v112c0 26.5 21.5 48 48 48h16c17.7 0 32-14.3 32-32V288c0-17.7-14.3-32-32-32h-32v-16c0-61.9 50.1-112 112-112s112 50.1 112-112v16h-32c-17.7 0-32 14.3-32 32v80c0 17.7 14.3 32 32 32h16c26.5 0 48-21.5 48-48V240c0-79.5-64.5-144-144-144z' fill='%23ff0055'/></svg>">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -161,7 +161,7 @@
             <!-- Buscador Global -->
             <div class="relative w-full md:w-96 group">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-neonRed transition-colors"></i>
-                <input type="text" id="searchInput" placeholder="Buscar autor (ej: Robin Sharma), año o título..." 
+                <input type="text" id="searchInput" placeholder="Buscar autor, título o saga..." 
                     class="w-full pl-11 pr-10 py-2.5 rounded-full bg-slate-900/80 border border-slate-700/60 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-neonRed focus:ring-1 focus:ring-neonRed transition-all duration-300">
                 <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
                     <i class="fa-solid fa-circle-xmark"></i>
@@ -169,9 +169,9 @@
             </div>
 
             <div class="flex items-center gap-2">
-                <button onclick="openGenreModal()" class="ios-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-neonRed/10 border border-neonRed text-neonRed hover:bg-neonRed hover:text-white shadow-[0_0_15px_rgba(255,0,85,0.3)] flex items-center gap-2">
-                    <i class="fa-solid fa-folder-plus text-sm"></i>
-                    <span>Nuevo Género</span>
+                <!-- Botón Nuevo Género: Solo Icono -->
+                <button onclick="openGenreModal()" title="Nuevo Género" class="ios-btn p-2.5 rounded-xl bg-neonRed/10 border border-neonRed text-neonRed hover:bg-neonRed hover:text-white shadow-[0_0_15px_rgba(255,0,85,0.3)] flex items-center justify-center">
+                    <i class="fa-solid fa-folder-plus text-base"></i>
                 </button>
                 <!-- Botón de Guardar y Respaldo mostrando únicamente el Icono -->
                 <button onclick="saveAllChangesAndExport()" title="Guardar cambios y descargar salva.json" class="ios-btn p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center justify-center">
@@ -269,7 +269,7 @@
         </div>
     </div>
 
-    <!-- Modal 2: Autor -->
+    <!-- Modal 2: Autor (Sin el campo de año) -->
     <div id="authorModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
         <div class="ios-glass border border-slate-700 rounded-3xl p-6 w-full max-w-md modal-enter relative">
             <div class="flex justify-between items-center mb-5">
@@ -289,11 +289,6 @@
                         class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
                 </div>
                 <div class="mb-4">
-                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Año Nombramiento / Nacimiento (year)</label>
-                    <input type="number" id="authorYearInput" placeholder="Ej: 1964" min="1000" max="2099" 
-                        class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
-                </div>
-                <div class="mb-4">
                     <label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL Avatar/Foto (Opcional)</label>
                     <input type="url" id="authorPhotoInput" placeholder="https://..." 
                         class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
@@ -306,6 +301,37 @@
                 <div class="flex justify-end gap-3">
                     <button type="button" onclick="closeModal('authorModal')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Cancelar</button>
                     <button type="submit" class="ios-btn px-6 py-2.5 rounded-xl text-xs font-bold bg-neonRed text-white shadow-[0_0_15px_rgba(255,0,85,0.4)]">Guardar Autor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Carpetas/Sagas del Autor -->
+    <div id="folderModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="ios-glass border border-slate-700 rounded-3xl p-6 w-full max-w-md modal-enter relative">
+            <div class="flex justify-between items-center mb-5">
+                <h3 id="folderModalTitle" class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-folder-plus text-neonRed"></i> Nueva Carpeta / Saga
+                </h3>
+                <button onclick="closeModal('folderModal')" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form id="folderForm" onsubmit="handleFolderSubmit(event)">
+                <input type="hidden" id="folderAuthorId">
+                <div class="mb-4">
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Nombre de la Carpeta / Saga</label>
+                    <input type="text" id="folderNameInput" required placeholder="Ej: Saga Harry Potter, Trilogía El Señor de los Anillos" 
+                        class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs font-mono uppercase text-slate-400 mb-2">Color Distintivo de la Carpeta</label>
+                    <div class="grid grid-cols-4 sm:grid-cols-8 gap-2.5 max-h-40 overflow-y-auto p-1" id="folderColorPickerContainer"></div>
+                    <input type="hidden" id="folderColorInput" value="#00f3ff">
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('folderModal')" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Cancelar</button>
+                    <button type="submit" class="ios-btn px-6 py-2.5 rounded-xl text-xs font-bold bg-neonRed text-white shadow-[0_0_15px_rgba(255,0,85,0.4)]">Crear Carpeta</button>
                 </div>
             </form>
         </div>
@@ -343,6 +369,19 @@
                         <input type="text" id="bookDurationInput" placeholder="Ej: 11h 00m" 
                             class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
                     </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Carpeta / Saga Destino</label>
+                        <select id="bookFolderInput" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                            <option value="">(Sin carpeta / Raíz del Autor)</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Progreso / Tiempo Escrito por Mí</label>
+                        <input type="text" id="bookProgressTextInput" placeholder="Ej: 1h 45m / 11h o 45% o Cap 4" 
+                            class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
+                    </div>
                     
                     <div class="md:col-span-2 bg-slate-900/90 p-3 rounded-xl border border-slate-800">
                         <label class="block text-xs font-mono uppercase text-slate-400 mb-2">Formatos Disponibles</label>
@@ -358,21 +397,9 @@
                         </div>
                     </div>
 
-                    <!-- Casilla 1: Enlace de Descargar Directa (Google Drive) -->
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-mono uppercase text-cyan-400 mb-1 flex items-center gap-1.5">
-                            <i class="fa-solid fa-download"></i> Enlace de Descargar (Google Drive)
-                        </label>
-                        <input type="url" id="bookDownloadUrlInput" placeholder="https://drive.google.com/file/d/.../view" 
-                            class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-cyan-400">
-                    </div>
-
-                    <!-- Casilla 2: Enlace Externo (Pestaña aparte) -->
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-mono uppercase text-rose-400 mb-1 flex items-center gap-1.5">
-                            <i class="fa-solid fa-up-right-from-square"></i> Enlace Externo (Pestaña Aparte)
-                        </label>
-                        <input type="url" id="bookExternalUrlInput" placeholder="https://..." 
+                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Enlace del Audiolibro (URL Externa)</label>
+                        <input type="url" id="bookAudioUrlInput" placeholder="https://..." 
                             class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
                     </div>
 
@@ -388,14 +415,6 @@
                         <label class="block text-xs font-mono uppercase text-slate-400 mb-1">URL Portada / Carátula (Opcional)</label>
                         <input type="url" id="bookCoverInput" placeholder="https://..." 
                             class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:border-neonRed">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Progreso (%)</label>
-                        <div class="flex items-center gap-4">
-                            <input type="range" id="bookProgressInput" min="0" max="100" value="0" oninput="document.getElementById('progVal').innerText = this.value + '%'" 
-                                class="flex-grow accent-neonRed">
-                            <span id="progVal" class="text-xs font-mono text-neonRed w-10 text-right">0%</span>
-                        </div>
                     </div>
                 </div>
 
@@ -427,11 +446,13 @@
                     {
                         id: 'auth-101',
                         name: 'Robin Sharma',
-                        year: '1964',
                         photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80',
                         bio: 'Experto mundial en liderazgo, autor de El Club de las 5 de la mañana y El monje que vendió su Ferrari.',
+                        folders: [
+                            { id: 'f-1', name: 'Serie Exito Personal', color: '#00f3ff' }
+                        ],
                         books: [
-                            { id: 'b-101', title: 'El Club de las 5 de la mañana', year: '2018', duration: '11h 00m', status: 'Escuchado', progress: 100, favorite: true, cover: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80', isFisico: true, isAudio: true, downloadUrl: '', externalUrl: '' }
+                            { id: 'b-101', title: 'El Club de las 5 de la mañana', year: '2018', duration: '11h 00m', folderId: 'f-1', progressText: '5h 30m / 11h', status: 'Escuchado', favorite: true, cover: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=600&q=80', isFisico: true, isAudio: true, audioUrl: '' }
                         ]
                     }
                 ]
@@ -444,7 +465,7 @@
         ];
 
         let libraryData = [];
-        let currentNavigation = { view: 'genres', genreId: null, authorId: null };
+        let currentNavigation = { view: 'genres', genreId: null, authorId: null, folderId: null };
         let searchQuery = '';
         let authorsSort = 'name-asc';
         let booksSort = 'year-desc';
@@ -452,30 +473,8 @@
         // Modos de vista ('list' o 'grid') para Autores y Libros
         let displayMode = {
             authors: 'list',
-            books: 'list'
+            books: 'grid'
         };
-
-        // Generar URL de Descargar Directa de Google Drive en una nueva pestaña
-        function getDirectDownloadUrl(url) {
-            if (!url) return '';
-            let fileId = '';
-            
-            const matchFile = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-            if (matchFile && matchFile[1]) {
-                fileId = matchFile[1];
-            } else {
-                const matchOpen = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-                if (matchOpen && matchOpen[1]) {
-                    fileId = matchOpen[1];
-                }
-            }
-
-            if (fileId) {
-                return `https://drive.google.com/uc?export=download&id=${fileId}`;
-            }
-
-            return url;
-        }
 
         // Helper para eliminar acentos en búsquedas
         function cleanString(str) {
@@ -484,7 +483,7 @@
 
         window.onload = function() {
             loadLibraryData();
-            setupColorPicker();
+            setupColorPickers();
             setupEventListeners();
             initBackgroundCanvas();
             renderApp();
@@ -559,20 +558,30 @@
             event.target.value = '';
         }
 
-        function setupColorPicker() {
+        function setupColorPickers() {
             const container = document.getElementById('colorPickerContainer');
             container.innerHTML = NEON_PALETTE.map((color, index) => `
-                <button type="button" onclick="selectColor('${color}', this)" 
+                <button type="button" onclick="selectColor('${color}', this, 'genreColorInput')" 
                     class="w-7 h-7 rounded-full border border-white/20 transition-all duration-200 hover:scale-125 flex items-center justify-center color-swatch ${index === 0 ? 'ring-2 ring-white scale-110' : ''}" 
                     style="background-color: ${color}; box-shadow: 0 0 10px ${color}80;">
                 </button>
             `).join('');
             document.getElementById('genreColorInput').value = NEON_PALETTE[0];
+
+            const folderContainer = document.getElementById('folderColorPickerContainer');
+            folderContainer.innerHTML = NEON_PALETTE.map((color, index) => `
+                <button type="button" onclick="selectColor('${color}', this, 'folderColorInput')" 
+                    class="w-7 h-7 rounded-full border border-white/20 transition-all duration-200 hover:scale-125 flex items-center justify-center color-swatch-folder ${index === 0 ? 'ring-2 ring-white scale-110' : ''}" 
+                    style="background-color: ${color}; box-shadow: 0 0 10px ${color}80;">
+                </button>
+            `).join('');
+            document.getElementById('folderColorInput').value = NEON_PALETTE[0];
         }
 
-        function selectColor(color, btnEl) {
-            document.getElementById('genreColorInput').value = color;
-            document.querySelectorAll('.color-swatch').forEach(el => {
+        function selectColor(color, btnEl, targetInputId) {
+            document.getElementById(targetInputId).value = color;
+            const swatchClass = targetInputId === 'folderColorInput' ? '.color-swatch-folder' : '.color-swatch';
+            document.querySelectorAll(swatchClass).forEach(el => {
                 el.classList.remove('ring-2', 'ring-white', 'scale-110');
             });
             btnEl.classList.add('ring-2', 'ring-white', 'scale-110');
@@ -612,10 +621,11 @@
             renderApp();
         }
 
-        function navigateTo(view, genreId = null, authorId = null) {
+        function navigateTo(view, genreId = null, authorId = null, folderId = null) {
             currentNavigation.view = view;
             if (genreId !== null) currentNavigation.genreId = genreId;
             if (authorId !== null) currentNavigation.authorId = authorId;
+            currentNavigation.folderId = folderId;
 
             if (view !== 'search') {
                 document.getElementById('searchInput').value = '';
@@ -634,13 +644,8 @@
                 arr.sort((a, b) => {
                     const nameA = a.name || a.nombre || '';
                     const nameB = b.name || b.nombre || '';
-                    const yearA = parseInt(a.year || a.año) || 0;
-                    const yearB = parseInt(b.year || b.año) || 0;
-
                     if (authorsSort === 'name-asc') return nameA.localeCompare(nameB);
                     if (authorsSort === 'name-desc') return nameB.localeCompare(nameA);
-                    if (authorsSort === 'year-asc') return yearA - yearB;
-                    if (authorsSort === 'year-desc') return yearB - yearA;
                 });
                 saveLibraryData();
             }
@@ -725,8 +730,6 @@
                         <select onchange="handleSortAuthors(this.value)" class="bg-transparent text-xs text-slate-200 focus:outline-none cursor-pointer">
                             <option value="name-asc" ${authorsSort === 'name-asc' ? 'selected' : ''}>Nombre (A-Z)</option>
                             <option value="name-desc" ${authorsSort === 'name-desc' ? 'selected' : ''}>Nombre (Z-A)</option>
-                            <option value="year-asc" ${authorsSort === 'year-asc' ? 'selected' : ''}>Año (Ascendente)</option>
-                            <option value="year-desc" ${authorsSort === 'year-desc' ? 'selected' : ''}>Año (Descendente)</option>
                         </select>
                     </div>
                     <button onclick="openAuthorModal('${currentNavigation.genreId}')" class="ios-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 border border-slate-700 text-slate-200 hover:border-white flex items-center gap-2">
@@ -747,9 +750,25 @@
                         <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
                         <span class="font-bold text-white">${author.name || author.nombre}</span>
                     `;
+
+                    if (currentNavigation.folderId) {
+                        const folder = (author.folders || []).find(f => f.id === currentNavigation.folderId);
+                        if (folder) {
+                            bcHtml += `
+                                <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
+                                <span class="font-bold flex items-center gap-1.5" style="color: ${folder.color}">
+                                    <i class="fa-solid fa-folder-open"></i> ${folder.name}
+                                </span>
+                            `;
+                        }
+                    }
                 }
                 const isGrid = displayMode.books === 'grid';
                 actions.innerHTML = `
+                    <button onclick="openFolderModal('${currentNavigation.authorId}')" class="ios-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 border border-slate-700 text-slate-200 hover:border-white flex items-center gap-2">
+                        <i class="fa-solid fa-folder-plus text-cyan-400"></i>
+                        <span>Nueva Saga/Carpeta</span>
+                    </button>
                     <button onclick="toggleDisplayMode('books')" title="Cambiar vista de lista/cuadros" 
                         class="ios-btn p-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1 text-xs">
                         <i class="fa-solid ${isGrid ? 'fa-list' : 'fa-grip'} text-neonRed text-sm"></i>
@@ -781,7 +800,7 @@
                 bcHtml = `
                     <span class="text-slate-400 flex items-center gap-2">
                         <i class="fa-solid fa-magnifying-glass text-neonRed"></i>
-                        Buscando name, year o title para: <strong class="text-white">"${document.getElementById('searchInput').value}"</strong>
+                        Buscando para: <strong class="text-white">"${document.getElementById('searchInput').value}"</strong>
                     </span>
                 `;
                 actions.innerHTML = '';
@@ -866,7 +885,7 @@
             setupDragAndDrop(list, 'genre');
         }
 
-        // View 2: Authors
+        // View 2: Authors (Imágenes de Autor AUN MÁS GRANDES en cuadros)
         function renderAuthorsView(container, emptyState) {
             const genre = libraryData.find(g => g.id === currentNavigation.genreId);
             const authorsList = genre ? (genre.authors || genre.autores || []) : [];
@@ -879,13 +898,12 @@
             const isGrid = displayMode.authors === 'grid';
             const list = document.createElement('div');
             list.id = 'authorsList';
-            list.className = isGrid ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5' : 'flex flex-col gap-3';
+            list.className = isGrid ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6' : 'flex flex-col gap-3';
 
             authorsList.forEach((author, index) => {
                 const books = author.books || author.libros || [];
                 const totalBooks = books.length;
                 const authorName = author.name || author.nombre || 'Sin Nombre';
-                const authorYear = author.year || author.año || '';
                 const genreColor = genre.color || '#ff0055';
 
                 const item = document.createElement('div');
@@ -903,17 +921,18 @@
                                 <i class="fa-solid fa-grip-vertical text-base"></i>
                             </div>
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded-full" style="background:${genreColor}20; color:${genreColor}; border:1px solid ${genreColor}40">
-                                ${authorYear ? authorYear : 'Autor'}
+                                Autor
                             </span>
                         </div>
-                        <div class="w-32 h-44 rounded-2xl overflow-hidden bg-slate-950 border-2 shadow-2xl relative mb-3 group"
-                            style="border-color: ${genreColor}; box-shadow: 0 0 20px ${genreColor}40"
+                        <!-- Tamaño de la foto de autor aun mas grande en la vista cuadros: w-52 h-72 -->
+                        <div class="w-52 h-72 rounded-2xl overflow-hidden bg-slate-950 border-2 shadow-2xl relative mb-3 group"
+                            style="border-color: ${genreColor}; box-shadow: 0 0 25px ${genreColor}40"
                             onclick="navigateTo('books', '${genre.id}', '${author.id}')">
                             ${author.photo ? 
                                 `<img src="${author.photo}" alt="${authorName}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">` : 
-                                `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-user text-5xl" style="color: ${genreColor}"></i></div>`}
+                                `<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-user text-6xl" style="color: ${genreColor}"></i></div>`}
                         </div>
-                        <h3 class="text-lg font-extrabold text-white truncate w-full" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
+                        <h3 class="text-xl font-extrabold text-white truncate w-full" onclick="navigateTo('books', '${genre.id}', '${author.id}')">
                             ${authorName}
                         </h3>
                         <p class="text-xs text-slate-400 line-clamp-2 mt-1 font-sans px-2">${author.bio || 'Sin biografía disponible.'}</p>
@@ -945,7 +964,6 @@
                             <div class="truncate">
                                 <h3 class="text-lg font-bold text-white truncate flex items-center gap-2">
                                     ${authorName}
-                                    ${authorYear ? `<span class="text-xs font-mono font-normal text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">(${authorYear})</span>` : ''}
                                 </h3>
                                 <p class="text-xs text-slate-400 line-clamp-2 mt-1 font-sans">${author.bio || 'Sin biografía disponible.'}</p>
                                 <div class="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
@@ -985,11 +1003,12 @@
             setupDragAndDrop(list, 'author');
         }
 
-        // View 3: Books (con renderizado condicional de botones si existen URLs)
+        // View 3: Books (Imágenes AUN MÁS GRANDES en cuadros, Carpetas/Sagas, Colores de carpeta y Progreso de texto)
         function renderBooksView(container, emptyState) {
             const genre = libraryData.find(g => g.id === currentNavigation.genreId);
             const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === currentNavigation.authorId) : null;
-            const booksList = author ? (author.books || author.libros || []) : [];
+            let booksList = author ? (author.books || author.libros || []) : [];
+            const folders = author ? (author.folders || []) : [];
 
             if (!genre || !author) {
                 emptyState.classList.remove('hidden');
@@ -1015,23 +1034,67 @@
                         <span class="neon-badge px-3 py-1 rounded-full text-xs font-mono font-bold" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
                             ${genre.name || genre.nombre}
                         </span>
-                        ${author.year ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700">Año / Nombramiento: ${author.year}</span>` : ''}
                     </div>
                     <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">${authorName}</h2>
                     <p class="text-sm text-slate-300 mt-3 leading-relaxed font-sans max-w-3xl">${author.bio || 'Sin biografía disponible para este autor.'}</p>
-                    <div class="mt-4 flex items-center justify-center md:justify-start gap-4 text-xs font-mono text-slate-400">
-                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-book-bookmark" style="color:${genreColor}"></i> ${booksList.length} Libros/Audiolibros</span>
+                    <div class="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-mono text-slate-400">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-book-bookmark" style="color:${genreColor}"></i> ${booksList.length} Audiolibros en total</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-folder-tree" style="color:${genreColor}"></i> ${folders.length} Carpetas / Sagas</span>
                     </div>
                 </div>
             `;
             container.appendChild(authorHeader);
+
+            // Sección de Carpetas / Sagas del Autor
+            if (folders.length > 0) {
+                const foldersSection = document.createElement('div');
+                foldersSection.className = 'mb-6';
+                foldersSection.innerHTML = `<h4 class="text-xs font-mono uppercase text-slate-400 mb-3 flex items-center gap-2"><i class="fa-solid fa-folder-open text-neonRed"></i> Carpetas de Sagas</h4>`;
+                
+                const foldersGrid = document.createElement('div');
+                foldersGrid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3';
+
+                // Opción para ver Todo
+                foldersGrid.innerHTML += `
+                    <div onclick="navigateTo('books', '${genre.id}', '${author.id}', null)" 
+                        class="p-3 rounded-2xl border ${!currentNavigation.folderId ? 'border-neonRed bg-slate-800/90' : 'border-slate-800 bg-slate-900/60'} cursor-pointer hover:border-neonRed transition-all flex items-center gap-3">
+                        <i class="fa-solid fa-border-all text-neonRed text-lg"></i>
+                        <span class="text-xs font-bold text-white truncate">Todos los Libros</span>
+                    </div>
+                `;
+
+                folders.forEach(f => {
+                    const isSelected = currentNavigation.folderId === f.id;
+                    foldersGrid.innerHTML += `
+                        <div onclick="navigateTo('books', '${genre.id}', '${author.id}', '${f.id}')" 
+                            class="p-3 rounded-2xl border ${isSelected ? 'bg-slate-800/90' : 'bg-slate-900/60'} cursor-pointer transition-all flex items-center justify-between gap-2"
+                            style="border-color: ${f.color || genreColor}">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <i class="fa-solid fa-folder text-lg" style="color: ${f.color || genreColor}"></i>
+                                <span class="text-xs font-bold text-white truncate">${f.name}</span>
+                            </div>
+                            <button onclick="event.stopPropagation(); deleteFolder('${author.id}', '${f.id}')" title="Eliminar Carpeta" class="text-slate-500 hover:text-rose-400 p-1">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+
+                foldersSection.appendChild(foldersGrid);
+                container.appendChild(foldersSection);
+            }
+
+            // Filtrar audiolibros si hay una carpeta seleccionada
+            if (currentNavigation.folderId) {
+                booksList = booksList.filter(b => b.folderId === currentNavigation.folderId);
+            }
 
             if (booksList.length === 0) {
                 const emptyBooks = document.createElement('div');
                 emptyBooks.className = 'text-center py-12 ios-glass rounded-3xl border border-dashed border-slate-800';
                 emptyBooks.innerHTML = `
                     <i class="fa-solid fa-book text-4xl text-slate-700 mb-2"></i>
-                    <p class="text-slate-400 text-sm">Este autor aún no posee libros agregados.</p>
+                    <p class="text-slate-400 text-sm">Esta sección aún no posee audiolibros agregados.</p>
                 `;
                 container.appendChild(emptyBooks);
                 return;
@@ -1040,40 +1103,28 @@
             const isGrid = displayMode.books === 'grid';
             const list = document.createElement('div');
             list.id = 'booksList';
-            list.className = isGrid ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5' : 'flex flex-col gap-3';
+            list.className = isGrid ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'flex flex-col gap-3';
 
             booksList.forEach((book, index) => {
                 const bookTitle = book.title || book.titulo || 'Sin título';
                 const bookYear = book.year || book.año || '';
-                
-                const rawDownload = (book.downloadUrl || book.audioUrl || '').trim();
-                const directDriveDownload = getDirectDownloadUrl(rawDownload);
-                const rawExternal = (book.externalUrl || '').trim();
 
-                const hasDownloadUrl = rawDownload !== '' && rawDownload !== '#';
-                const hasExternalUrl = rawExternal !== '' && rawExternal !== '#';
-
-                const downloadBtnHtml = hasDownloadUrl ? `
-                    <a href="${directDriveDownload}" target="_blank" rel="noopener noreferrer" download title="Descargar Audiolibro de Google Drive en pestaña nueva"
-                        class="ios-btn p-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center justify-center shadow-[0_0_10px_rgba(0,243,255,0.3)]">
-                        <i class="fa-solid fa-download text-base"></i>
-                    </a>
-                ` : '';
-
-                const externalBtnHtml = hasExternalUrl ? `
-                    <a href="${rawExternal}" target="_blank" rel="noopener noreferrer" title="Abrir enlace externo en pestaña nueva"
-                        class="ios-btn p-2.5 rounded-xl bg-neonRed/20 hover:bg-neonRed border border-neonRed text-neonRed hover:text-white text-xs font-bold flex items-center justify-center shadow-[0_0_10px_rgba(255,0,85,0.3)]">
-                        <i class="fa-solid fa-up-right-from-square text-base"></i>
-                    </a>
-                ` : '';
+                // Determinar el color de la carpeta donde está ubicado el libro
+                let folderColor = genreColor;
+                if (book.folderId) {
+                    const parentFolder = folders.find(f => f.id === book.folderId);
+                    if (parentFolder && parentFolder.color) {
+                        folderColor = parentFolder.color;
+                    }
+                }
 
                 const item = document.createElement('div');
                 item.className = 'ios-glass-card p-4 md:p-5 flex justify-between gap-4 draggable-item ' + (isGrid ? 'flex-col items-center text-center' : 'flex-col sm:flex-row items-start sm:items-center');
                 item.setAttribute('draggable', 'true');
                 item.dataset.index = index;
                 item.dataset.type = 'book';
-                item.style.setProperty('--genre-neon', genreColor);
-                item.style.setProperty('--genre-glow', `${genreColor}40`);
+                item.style.setProperty('--genre-neon', folderColor);
+                item.style.setProperty('--genre-glow', `${folderColor}40`);
 
                 if (isGrid) {
                     item.innerHTML = `
@@ -1081,30 +1132,31 @@
                             <div class="cursor-grab active:cursor-grabbing hover:text-slate-300 p-1 drag-handle" onclick="event.stopPropagation()">
                                 <i class="fa-solid fa-grip-vertical text-base"></i>
                             </div>
-                            <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800">${bookYear || 'N/D'}</span>
+                            <!-- Año del libro con el color de la carpeta y tamaño mas grande y visible -->
+                            <span class="text-sm font-extrabold font-mono px-3 py-1 rounded-md bg-slate-900 border" style="color: ${folderColor}; border-color: ${folderColor}60">
+                                ${bookYear || 'N/D'}
+                            </span>
                         </div>
-                        <div class="w-32 h-48 rounded-xl overflow-hidden bg-slate-950 border shadow-2xl relative my-2 group"
-                            style="border-color: ${genreColor}; box-shadow: 0 0 15px ${genreColor}30">
+                        <!-- Tamaño de la carátula aun mas grande en la vista cuadros: w-56 h-80 -->
+                        <div class="w-56 h-80 rounded-xl overflow-hidden bg-slate-950 border-2 shadow-2xl relative my-2 group"
+                            style="border-color: ${folderColor}; box-shadow: 0 0 20px ${folderColor}40">
                             ${book.cover ? 
                                 `<img src="${book.cover}" alt="${bookTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">` : 
-                                `<div class="w-full h-full flex items-center justify-center text-slate-700"><i class="fa-solid fa-book-open text-4xl"></i></div>`}
+                                `<div class="w-full h-full flex items-center justify-center text-slate-700"><i class="fa-solid fa-book-open text-5xl"></i></div>`}
                         </div>
-                        <h3 class="text-base font-bold text-white break-words line-clamp-2 w-full">${bookTitle}</h3>
-                        <p class="text-xs text-slate-400 font-medium mt-1"><i class="fa-solid fa-user-pen mr-1" style="color:${genreColor}"></i>${authorName}</p>
+                        <h3 class="text-lg font-bold text-white break-words line-clamp-2 w-full">${bookTitle}</h3>
+                        <p class="text-xs text-slate-400 font-medium mt-1"><i class="fa-solid fa-user-pen mr-1" style="color:${folderColor}"></i>${authorName}</p>
                         
-                        <div class="w-full mt-3">
-                            <div class="flex justify-between text-[10px] font-mono text-slate-400 mb-1">
-                                <span>${book.duration || 'N/D'}</span>
-                                <span style="color:${genreColor}">${book.progress || 0}%</span>
-                            </div>
-                            <div class="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                                <div class="h-full rounded-full" style="width:${book.progress || 0}%; background-color:${genreColor}"></div>
+                        <div class="w-full mt-3 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80">
+                            <!-- Duracion con el color de la carpeta y tamaño mas visible -->
+                            <div class="flex justify-between items-center text-sm font-bold font-mono">
+                                <span style="color:${folderColor}"><i class="fa-solid fa-clock mr-1"></i>${book.duration || 'N/D'}</span>
+                                <span class="text-slate-300 text-xs">${book.progressText || 'Sin marca'}</span>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800/80 w-full justify-center">
-                            ${downloadBtnHtml}
-                            ${externalBtnHtml}
+                            ${book.audioUrl ? `<a href="${book.audioUrl}" target="_blank" class="ios-btn p-2 rounded-xl bg-cyan-500/20 text-cyan-300"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
                             <button onclick="toggleFavorite('${genre.id}', '${author.id}', '${book.id}')" class="ios-btn p-2 rounded-xl bg-slate-800 text-slate-300"><i class="${book.favorite ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart text-slate-500'}"></i></button>
                             <button onclick="openBookModal('${genre.id}', '${author.id}', '${book.id}')" class="ios-btn p-2 rounded-xl bg-slate-800 text-amber-400"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button onclick="deleteBook('${genre.id}', '${author.id}', '${book.id}')" class="ios-btn p-2 rounded-xl bg-slate-800 text-rose-500"><i class="fa-solid fa-trash-can"></i></button>
@@ -1118,7 +1170,7 @@
                             </div>
 
                             <div class="w-24 h-36 rounded-xl overflow-hidden shrink-0 bg-slate-950 flex items-center justify-center border shadow-xl relative group"
-                                style="border-color: ${genreColor}; box-shadow: 0 0 15px ${genreColor}25">
+                                style="border-color: ${folderColor}; box-shadow: 0 0 15px ${folderColor}25">
                                 ${book.cover ? 
                                     `<img src="${book.cover}" alt="${bookTitle}" class="w-full h-full object-cover">` : 
                                     `<i class="fa-solid fa-book-open text-3xl text-slate-700"></i>`}
@@ -1129,7 +1181,8 @@
                                     <span class="neon-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider" style="--genre-neon: ${genreColor}; --genre-glow: ${genreColor}40">
                                         ${genre.name || genre.nombre}
                                     </span>
-                                    ${bookYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md"><i class="fa-solid fa-calendar-day mr-1"></i>${bookYear}</span>` : ''}
+                                    <!-- Año de publicación visible y destacado con el color de la carpeta -->
+                                    ${bookYear ? `<span class="text-sm font-extrabold font-mono px-2.5 py-0.5 rounded-md bg-slate-900 border" style="color:${folderColor}; border-color:${folderColor}50"><i class="fa-solid fa-calendar-day mr-1"></i>${bookYear}</span>` : ''}
                                     <span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">${book.status || 'Pendiente'}</span>
                                     
                                     ${book.isFisico ? `<span class="text-[10px] font-bold font-mono bg-amber-500/10 border border-amber-500 text-amber-400 px-2 py-0.5 rounded-md flex items-center gap-1"><i class="fa-solid fa-book"></i> Físico</span>` : ''}
@@ -1143,22 +1196,21 @@
                                     <i class="fa-solid fa-user-pen mr-1" style="color: ${genreColor}"></i> ${authorName}
                                 </p>
 
-                                <div class="mt-3 max-w-md">
-                                    <div class="flex justify-between text-[11px] font-mono text-slate-400 mb-1">
-                                        <span>${book.duration || 'Duración N/D'}</span>
-                                        <span style="color: ${genreColor}">${book.progress || 0}%</span>
-                                    </div>
-                                    <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                                        <div class="h-full rounded-full transition-all duration-500" 
-                                            style="width: ${book.progress || 0}%; background-color: ${genreColor}; box-shadow: 0 0 10px ${genreColor}"></div>
-                                    </div>
+                                <div class="mt-3 max-w-md bg-slate-900/80 p-2 rounded-xl border border-slate-800/80 flex items-center justify-between text-sm font-bold font-mono">
+                                    <span style="color: ${folderColor}"><i class="fa-solid fa-clock mr-1"></i>${book.duration || 'Duración N/D'}</span>
+                                    <span class="text-xs text-slate-300 font-sans"><i class="fa-solid fa-bookmark text-neonRed mr-1"></i>${book.progressText || 'Sin marca'}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                            ${downloadBtnHtml}
-                            ${externalBtnHtml}
+                            ${book.audioUrl ? `
+                                <a href="${book.audioUrl}" target="_blank" rel="noopener noreferrer" title="Escuchar Audiolibro en Pestaña Nueva"
+                                    class="ios-btn px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(0,243,255,0.3)]">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    <span>Escuchar</span>
+                                </a>
+                            ` : ''}
                             
                             <button onclick="toggleFavorite('${genre.id}', '${author.id}', '${book.id}')" 
                                 title="Favorito"
@@ -1166,12 +1218,12 @@
                                 <i class="${book.favorite ? 'fa-solid fa-heart text-rose-500' : 'fa-regular fa-heart text-slate-500'} text-base"></i>
                             </button>
                             <button onclick="openBookModal('${genre.id}', '${author.id}', '${book.id}')" 
-                                title="Editar Libro"
+                                title="Editar Audiolibro"
                                 class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300">
                                 <i class="fa-solid fa-pen-to-square text-amber-400 text-base"></i>
                             </button>
                             <button onclick="deleteBook('${genre.id}', '${author.id}', '${book.id}')" 
-                                title="Eliminar Libro"
+                                title="Eliminar Audiolibro"
                                 class="ios-btn p-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-950/60 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
                                 <i class="fa-solid fa-trash-can text-rose-500 text-base"></i>
                             </button>
@@ -1198,11 +1250,9 @@
 
                 authors.forEach(author => {
                     const authorName = cleanString(author.name || author.nombre);
-                    const authorYear = cleanString(author.year || author.año);
                     const matchAuthorName = authorName.includes(searchQuery);
-                    const matchAuthorYear = authorYear.includes(searchQuery);
 
-                    if (matchAuthorName || matchAuthorYear) {
+                    if (matchAuthorName) {
                         authorMatches.push({ genre, author });
                     }
 
@@ -1213,7 +1263,7 @@
                         const matchBookTitle = bookTitle.includes(searchQuery);
                         const matchBookYear = bookYear.includes(searchQuery);
 
-                        if (matchGenre || matchAuthorName || matchAuthorYear || matchBookTitle || matchBookYear) {
+                        if (matchGenre || matchAuthorName || matchBookTitle || matchBookYear) {
                             bookMatches.push({ genre, author, book });
                         }
                     });
@@ -1228,9 +1278,9 @@
             const list = document.createElement('div');
             list.className = 'flex flex-col gap-3';
 
+            // 1. Mostrar Autor primero si hubo coincidencia
             authorMatches.forEach(({ genre, author }) => {
                 const authorName = author.name || author.nombre || 'Autor';
-                const authorYear = author.year || author.año || '';
                 const genreColor = genre.color || '#ff0055';
 
                 const authorCard = document.createElement('div');
@@ -1250,7 +1300,6 @@
                                 <span class="neon-badge px-2 py-0.5 rounded-full text-[10px] font-mono font-bold">
                                     <i class="fa-solid fa-folder mr-1"></i> Carpeta de Autor
                                 </span>
-                                ${authorYear ? `<span class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded-md">(${authorYear})</span>` : ''}
                             </div>
                             <h3 class="text-lg font-extrabold text-white truncate">${authorName}</h3>
                             <p class="text-xs text-slate-400 line-clamp-1 mt-0.5 font-sans">${author.bio || 'Sin biografía disponible.'}</p>
@@ -1265,31 +1314,13 @@
                 list.appendChild(authorCard);
             });
 
+            // 2. Mostrar Audiolibros coincidentes
             bookMatches.forEach(({ genre, author, book }) => {
                 const bookTitle = book.title || book.titulo || 'Sin Título';
                 const bookYear = book.year || book.año || '';
                 const authorName = author.name || author.nombre || 'Autor Desconocido';
                 const genreName = genre.name || genre.nombre || 'Género';
                 const genreColor = genre.color || '#ff0055';
-
-                const rawDownload = (book.downloadUrl || book.audioUrl || '').trim();
-                const directDriveDownload = getDirectDownloadUrl(rawDownload);
-                const rawExternal = (book.externalUrl || '').trim();
-
-                const hasDownloadUrl = rawDownload !== '' && rawDownload !== '#';
-                const hasExternalUrl = rawExternal !== '' && rawExternal !== '#';
-
-                const downloadBtnHtml = hasDownloadUrl ? `
-                    <a href="${directDriveDownload}" target="_blank" rel="noopener noreferrer" download title="Descargar Audiolibro" class="ios-btn p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">
-                        <i class="fa-solid fa-download text-sm"></i>
-                    </a>
-                ` : '';
-
-                const externalBtnHtml = hasExternalUrl ? `
-                    <a href="${rawExternal}" target="_blank" rel="noopener noreferrer" title="Abrir Enlace Externo" class="ios-btn p-2 rounded-xl bg-neonRed/20 text-neonRed border border-neonRed/40">
-                        <i class="fa-solid fa-up-right-from-square text-sm"></i>
-                    </a>
-                ` : '';
 
                 const bookCard = document.createElement('div');
                 bookCard.className = 'ios-glass-card p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4';
@@ -1314,8 +1345,11 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        ${downloadBtnHtml}
-                        ${externalBtnHtml}
+                        ${book.audioUrl ? `
+                            <a href="${book.audioUrl}" target="_blank" class="ios-btn px-3 py-1.5 rounded-xl bg-cyan-500/20 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Escuchar
+                            </a>
+                        ` : ''}
                         <button onclick="navigateTo('books', '${genre.id}', '${author.id}')" class="ios-btn px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-semibold text-white hover:bg-slate-700">
                             Ir al Autor <i class="fa-solid fa-arrow-right ml-1"></i>
                         </button>
@@ -1360,25 +1394,6 @@
                 const genreName = genre.name || genre.nombre || 'Género';
                 const genreColor = genre.color || '#ff0055';
 
-                const rawDownload = (book.downloadUrl || book.audioUrl || '').trim();
-                const directDriveDownload = getDirectDownloadUrl(rawDownload);
-                const rawExternal = (book.externalUrl || '').trim();
-
-                const hasDownloadUrl = rawDownload !== '' && rawDownload !== '#';
-                const hasExternalUrl = rawExternal !== '' && rawExternal !== '#';
-
-                const downloadBtnHtml = hasDownloadUrl ? `
-                    <a href="${directDriveDownload}" target="_blank" rel="noopener noreferrer" download title="Descargar Audiolibro" class="ios-btn p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">
-                        <i class="fa-solid fa-download text-sm"></i>
-                    </a>
-                ` : '';
-
-                const externalBtnHtml = hasExternalUrl ? `
-                    <a href="${rawExternal}" target="_blank" rel="noopener noreferrer" title="Abrir Enlace Externo" class="ios-btn p-2 rounded-xl bg-neonRed/20 text-neonRed border border-neonRed/40">
-                        <i class="fa-solid fa-up-right-from-square text-sm"></i>
-                    </a>
-                ` : '';
-
                 const item = document.createElement('div');
                 item.className = 'ios-glass-card p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-l-4 border-amber-400';
 
@@ -1400,8 +1415,12 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        ${downloadBtnHtml}
-                        ${externalBtnHtml}
+                        ${book.audioUrl ? `
+                            <a href="${book.audioUrl}" target="_blank" rel="noopener noreferrer" 
+                                class="ios-btn px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500 border border-cyan-400 text-cyan-300 hover:text-white text-xs font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Escuchar
+                            </a>
+                        ` : ''}
                         <button onclick="toggleFavorite('${genre.id}', '${author.id}', '${book.id}')" title="Quitar de Favoritos" class="ios-btn p-2.5 rounded-xl bg-slate-800 text-rose-500 hover:bg-rose-950/40 border border-rose-900">
                             <i class="fa-solid fa-heart text-base"></i>
                         </button>
@@ -1492,7 +1511,7 @@
                     title.innerHTML = `<i class="fa-solid fa-pen-to-square text-neonRed"></i> Editar Género`;
                     nameInput.value = genre.name || genre.nombre || '';
                     editId.value = genre.id;
-                    selectColor(genre.color || '#ff0055', document.querySelector(`.color-swatch[style*="${genre.color}"]`) || document.querySelectorAll('.color-swatch')[0]);
+                    selectColor(genre.color || '#ff0055', document.querySelector(`.color-swatch[style*="${genre.color}"]`) || document.querySelectorAll('.color-swatch')[0], 'genreColorInput');
                 }
             } else {
                 title.innerHTML = `<i class="fa-solid fa-folder-plus text-neonRed"></i> Nuevo Género`;
@@ -1538,11 +1557,11 @@
             }
         }
 
+        // Autor (sin campo year)
         function openAuthorModal(genreId, authorId = null) {
             const modal = document.getElementById('authorModal');
             const title = document.getElementById('authorModalTitle');
             const nameInput = document.getElementById('authorNameInput');
-            const yearInput = document.getElementById('authorYearInput');
             const photoInput = document.getElementById('authorPhotoInput');
             const bioInput = document.getElementById('authorBioInput');
             const genreIdHidden = document.getElementById('authorGenreId');
@@ -1556,7 +1575,6 @@
                 if (author) {
                     title.innerHTML = `<i class="fa-solid fa-user-pen text-neonRed"></i> Editar Autor`;
                     nameInput.value = author.name || author.nombre || '';
-                    yearInput.value = author.year || author.año || '';
                     photoInput.value = author.photo || '';
                     bioInput.value = author.bio || '';
                     editId.value = author.id;
@@ -1564,7 +1582,6 @@
             } else {
                 title.innerHTML = `<i class="fa-solid fa-user-plus text-neonRed"></i> Nuevo Autor`;
                 nameInput.value = '';
-                yearInput.value = '';
                 photoInput.value = '';
                 bioInput.value = '';
                 editId.value = '';
@@ -1578,7 +1595,6 @@
             const genreId = document.getElementById('authorGenreId').value;
             const authorId = document.getElementById('authorEditId').value;
             const name = document.getElementById('authorNameInput').value.trim();
-            const year = document.getElementById('authorYearInput').value;
             const photo = document.getElementById('authorPhotoInput').value.trim();
             const bio = document.getElementById('authorBioInput').value.trim();
 
@@ -1592,7 +1608,6 @@
                 const author = genre.authors.find(a => a.id === authorId);
                 if (author) {
                     author.name = name;
-                    author.year = year;
                     author.photo = photo;
                     author.bio = bio;
                 }
@@ -1600,9 +1615,9 @@
                 const newAuthor = {
                     id: 'auth-' + Date.now(),
                     name: name,
-                    year: year,
                     photo: photo,
                     bio: bio,
+                    folders: [],
                     books: []
                 };
                 genre.authors.push(newAuthor);
@@ -1625,58 +1640,111 @@
             }
         }
 
+        // Lógica de Modales de Carpetas / Sagas del Autor
+        function openFolderModal(authorId) {
+            document.getElementById('folderAuthorId').value = authorId;
+            document.getElementById('folderNameInput').value = '';
+            document.getElementById('folderModal').classList.remove('hidden');
+        }
+
+        function handleFolderSubmit(e) {
+            e.preventDefault();
+            const authorId = document.getElementById('folderAuthorId').value;
+            const name = document.getElementById('folderNameInput').value.trim();
+            const color = document.getElementById('folderColorInput').value;
+
+            const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+            const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === authorId) : null;
+
+            if (author) {
+                if (!author.folders) author.folders = [];
+                author.folders.push({
+                    id: 'f-' + Date.now(),
+                    name: name,
+                    color: color
+                });
+
+                saveLibraryData();
+                closeModal('folderModal');
+                renderApp();
+            }
+        }
+
+        function deleteFolder(authorId, folderId) {
+            if (confirm('¿Deseas eliminar esta carpeta? Los libros en ella volverán a la raíz del autor.')) {
+                const genre = libraryData.find(g => g.id === currentNavigation.genreId);
+                const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === authorId) : null;
+                if (author) {
+                    author.folders = (author.folders || []).filter(f => f.id !== folderId);
+                    (author.books || []).forEach(b => {
+                        if (b.folderId === folderId) delete b.folderId;
+                    });
+                    if (currentNavigation.folderId === folderId) currentNavigation.folderId = null;
+                    saveLibraryData();
+                    renderApp();
+                }
+            }
+        }
+
+        // Audiolibro (con selección de carpeta y progreso escrito)
         function openBookModal(genreId, authorId, bookId = null) {
             const modal = document.getElementById('bookModal');
             const title = document.getElementById('bookModalTitle');
             const titleInput = document.getElementById('bookTitleInput');
             const yearInput = document.getElementById('bookYearInput');
             const durationInput = document.getElementById('bookDurationInput');
+            const folderSelect = document.getElementById('bookFolderInput');
+            const progressTextInput = document.getElementById('bookProgressTextInput');
             const statusInput = document.getElementById('bookStatusInput');
             const coverInput = document.getElementById('bookCoverInput');
-            const progressInput = document.getElementById('bookProgressInput');
-            const progVal = document.getElementById('progVal');
             const fisicoInput = document.getElementById('bookFisicoInput');
             const audioInput = document.getElementById('bookAudioInput');
-            const downloadUrlInput = document.getElementById('bookDownloadUrlInput');
-            const externalUrlInput = document.getElementById('bookExternalUrlInput');
+            const audioUrlInput = document.getElementById('bookAudioUrlInput');
             
             document.getElementById('bookGenreId').value = genreId;
             document.getElementById('bookAuthorId').value = authorId;
             const editId = document.getElementById('bookEditId');
 
+            // Cargar carpetas del autor en el selector
+            const genre = libraryData.find(g => g.id === genreId);
+            const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === authorId) : null;
+            
+            folderSelect.innerHTML = `<option value="">(Sin carpeta / Raíz del Autor)</option>`;
+            if (author && author.folders) {
+                author.folders.forEach(f => {
+                    folderSelect.innerHTML += `<option value="${f.id}">📁 ${f.name}</option>`;
+                });
+            }
+
             if (bookId) {
-                const genre = libraryData.find(g => g.id === genreId);
-                const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === authorId) : null;
                 const book = author ? (author.books || author.libros || []).find(b => b.id === bookId) : null;
 
                 if (book) {
-                    title.innerHTML = `<i class="fa-solid fa-pen-to-square text-neonRed"></i> Editar Libro`;
+                    title.innerHTML = `<i class="fa-solid fa-pen-to-square text-neonRed"></i> Editar Audiolibro`;
                     titleInput.value = book.title || book.titulo || '';
                     yearInput.value = book.year || book.año || '';
                     durationInput.value = book.duration || '';
+                    folderSelect.value = book.folderId || '';
+                    progressTextInput.value = book.progressText || '';
                     statusInput.value = book.status || 'Pendiente';
                     coverInput.value = book.cover || '';
-                    progressInput.value = book.progress || 0;
-                    progVal.innerText = (book.progress || 0) + '%';
                     fisicoInput.checked = !!book.isFisico;
                     audioInput.checked = !!book.isAudio;
-                    downloadUrlInput.value = book.downloadUrl || book.audioUrl || '';
-                    externalUrlInput.value = book.externalUrl || '';
+                    audioUrlInput.value = book.audioUrl || '';
                     editId.value = book.id;
                 }
             } else {
-                title.innerHTML = `<i class="fa-solid fa-book-medical text-neonRed"></i> Nuevo Libro`;
+                title.innerHTML = `<i class="fa-solid fa-book-medical text-neonRed"></i> Nuevo Audiolibro`;
                 titleInput.value = '';
                 yearInput.value = '';
                 durationInput.value = '';
+                folderSelect.value = currentNavigation.folderId || '';
+                progressTextInput.value = '';
                 statusInput.value = 'Pendiente';
                 coverInput.value = '';
-                progressInput.value = 0;
-                progVal.innerText = '0%';
                 fisicoInput.checked = false;
                 audioInput.checked = true;
-                downloadUrlInput.value = '';
-                externalUrlInput.value = '';
+                audioUrlInput.value = '';
                 editId.value = '';
             }
 
@@ -1692,13 +1760,13 @@
             const title = document.getElementById('bookTitleInput').value.trim();
             const year = document.getElementById('bookYearInput').value;
             const duration = document.getElementById('bookDurationInput').value.trim();
+            const folderId = document.getElementById('bookFolderInput').value;
+            const progressText = document.getElementById('bookProgressTextInput').value.trim();
             const status = document.getElementById('bookStatusInput').value;
             const cover = document.getElementById('bookCoverInput').value.trim();
-            const progress = parseInt(document.getElementById('bookProgressInput').value) || 0;
             const isFisico = document.getElementById('bookFisicoInput').checked;
             const isAudio = document.getElementById('bookAudioInput').checked;
-            const downloadUrl = document.getElementById('bookDownloadUrlInput').value.trim();
-            const externalUrl = document.getElementById('bookExternalUrlInput').value.trim();
+            const audioUrl = document.getElementById('bookAudioUrlInput').value.trim();
 
             const genre = libraryData.find(g => g.id === genreId);
             const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === authorId) : null;
@@ -1713,13 +1781,13 @@
                     book.title = title;
                     book.year = year;
                     book.duration = duration;
+                    book.folderId = folderId || null;
+                    book.progressText = progressText;
                     book.status = status;
                     book.cover = cover;
-                    book.progress = progress;
                     book.isFisico = isFisico;
                     book.isAudio = isAudio;
-                    book.downloadUrl = downloadUrl;
-                    book.externalUrl = externalUrl;
+                    book.audioUrl = audioUrl;
                 }
             } else {
                 const newBook = {
@@ -1727,14 +1795,14 @@
                     title: title,
                     year: year,
                     duration: duration,
+                    folderId: folderId || null,
+                    progressText: progressText,
                     status: status,
-                    progress: progress,
                     favorite: false,
                     cover: cover,
                     isFisico: isFisico,
                     isAudio: isAudio,
-                    downloadUrl: downloadUrl,
-                    externalUrl: externalUrl
+                    audioUrl: audioUrl
                 };
                 author.books.push(newBook);
             }
@@ -1745,7 +1813,7 @@
         }
 
         function deleteBook(genreId, authorId, bookId) {
-            if (confirm('¿Deseas eliminar este libro?')) {
+            if (confirm('¿Deseas eliminar este audiolibro?')) {
                 const genre = libraryData.find(g => g.id === genreId);
                 const author = genre ? (genre.authors || genre.autores || []).find(a => a.id === authorId) : null;
                 if (author) {
@@ -1775,7 +1843,6 @@
 
             const books = author.books || author.libros || [];
             const authorName = author.name || author.nombre || 'Autor';
-            const authorYear = author.year || author.año || '';
             const genreColor = genre.color || '#ff0055';
             const genreName = genre.name || genre.nombre || '';
 
@@ -1788,13 +1855,13 @@
                     </div>
                     <div>
                         <span class="neon-badge px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase" style="--genre-neon:${genreColor}; --genre-glow:${genreColor}40">${genreName}</span>
-                        <h2 class="text-2xl font-extrabold text-white mt-1">${authorName} ${authorYear ? `(${authorYear})` : ''}</h2>
+                        <h2 class="text-2xl font-extrabold text-white mt-1">${authorName}</h2>
                         <p class="text-slate-300 text-sm mt-3 leading-relaxed">${author.bio || 'Sin biografía registrada.'}</p>
                     </div>
                 </div>
 
                 <div class="mt-6 pt-5 border-t border-slate-800">
-                    <h4 class="text-xs font-mono uppercase text-slate-400 mb-3">Libros / Audiolibros Publicados (${books.length})</h4>
+                    <h4 class="text-xs font-mono uppercase text-slate-400 mb-3">Audiolibros Publicados (${books.length})</h4>
                     <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
                         ${books.map(b => `
                             <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-3">

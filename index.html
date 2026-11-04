@@ -177,8 +177,12 @@
                 <button onclick="saveAllChangesAndExport()" title="Guardar cambios y descargar salva.json" class="ios-btn p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center justify-center">
                     <i class="fa-solid fa-floppy-disk text-base"></i>
                 </button>
+                <!-- Botón Descargar Copia de Respaldo de Google Drive -->
+                <a href="https://drive.google.com/drive/folders/1xlyq8siWMYgW-aKoC8JNoMaQNmcgyw6l?usp=sharing" target="_blank" rel="noopener noreferrer" title="Descargar Respaldo desde Google Drive" class="ios-btn p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-white shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center justify-center">
+                    <i class="fa-solid fa-cloud-arrow-down text-base"></i>
+                </a>
                 <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
-                <button onclick="document.getElementById('importFileInput').click()" title="Importar Respaldo JSON" class="ios-btn p-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-700 border border-slate-700 text-slate-300">
+                <button onclick="handleImportClick()" title="Importar Respaldo JSON" class="ios-btn p-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-700 border border-slate-700 text-slate-300">
                     <i class="fa-solid fa-upload text-sm"></i>
                 </button>
                 <button onclick="resetToDefaults()" title="Restablecer Datos por Defecto" class="ios-btn p-2.5 rounded-xl bg-slate-800/70 hover:bg-rose-950/40 border border-slate-700 hover:border-rose-700 text-slate-300 hover:text-rose-400">
@@ -483,7 +487,7 @@
 
         // Helper para eliminar acentos en búsquedas
         function cleanString(str) {
-            return (str || '').toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+            return (str || '').toString().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
         }
 
         window.onload = function() {
@@ -542,6 +546,26 @@
             document.body.appendChild(dlAnchor);
             dlAnchor.click();
             dlAnchor.remove();
+        }
+
+        async function handleImportClick() {
+            const googleDriveUrl = 'https://drive.google.com/drive/folders/1xlyq8siWMYgW-aKoC8JNoMaQNmcgyw6l?usp=sharing';
+            try {
+                const response = await fetch(googleDriveUrl);
+                if (response.ok) {
+                    const imported = await response.json();
+                    if (Array.isArray(imported)) {
+                        libraryData = imported;
+                        saveLibraryData();
+                        navigateTo('genres');
+                        alert('¡Salva.json descargada e importada desde Google Drive con éxito!');
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.log('Error al obtener desde Google Drive directamente, abriendo selector local...', err);
+            }
+            document.getElementById('importFileInput').click();
         }
 
         function importData(event) {
